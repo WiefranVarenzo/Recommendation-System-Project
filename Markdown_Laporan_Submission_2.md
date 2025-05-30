@@ -1150,15 +1150,7 @@ Pendekatan ini unggul dari segi efisiensi dan kesederhanaan. Namun, karena hanya
 | Fleksibilitas | Tinggi (bisa disesuaikan)    | Terbatas             |
 | Kemampuan     | Bisa tangkap pola non-linear | Linear saja          |
 
-
-Berikut adalah versi **Evaluasi** yang telah diperbarui berdasarkan **data terbaru dari dua pendekatan**: *Content-Based Filtering* dan *Collaborative Filtering*, sesuai data pelatihan terkini yang Anda berikan.
-
-
-Berikut ringkasan **kelebihan dan kekurangan** dari dua pendekatan *Collaborative Filtering* yang Anda gunakan:
-
 ---
-
-
 
 ### **1. RecommenderNet (Neural Network-based CF)**
 
