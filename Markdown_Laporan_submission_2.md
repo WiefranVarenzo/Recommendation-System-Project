@@ -93,7 +93,7 @@ Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
 ### **Kondisi dan Kuantitas Data**
 
-Dataset mencakup jutaan baris transaksi dan ribuan entitas unik seperti pelanggan, produk, dan toko dari berbagai negara. Seluruh data tampak bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi.
+Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi.
 
 ---
 
@@ -172,7 +172,7 @@ Dataset mencakup jutaan baris transaksi dan ribuan entitas unik seperti pelangga
 
 ---
 
-### **Exploratory Data Analysis (Univariate EDA)**
+### **Exploratory Data Analysis**
 
 #### **Customer Dataset**
 
