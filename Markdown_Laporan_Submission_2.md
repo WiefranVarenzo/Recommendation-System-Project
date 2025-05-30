@@ -773,7 +773,7 @@ Top Words in LSA for Product:
 
 Collaborative Filtering memanfaatkan **interaksi antar pengguna** (transaksi) untuk memberikan rekomendasi berdasarkan kesamaan perilaku pengguna. CF cocok untuk menangkap pola tersembunyi dari data interaksi.
 #### **Persiapan Data Collaborative Filtering**
-
+**"User-Item Interaction Filtering"**
 ```python
 cf_data = df[['Customer ID', 'Product ID', 'Line Total']].copy()
 cf_data = cf_data[cf_data['Line Total'] > 0].copy()
@@ -781,10 +781,11 @@ cf_data = cf_data[cf_data['Line Total'] > 0].copy()
 
 **Penjelasan:**
 
-* Ambil hanya kolom relevan: ID pelanggan, produk, dan jumlah transaksi (`Line Total`).
-* Filter transaksi yang valid (positif). Rating akan dihitung dari `Line Total`.
+Kode tersebut adalah bagian dari tahap *data preparation* untuk membangun sistem rekomendasi berbasis *collaborative filtering*. Di sini, hanya tiga kolom utama yang diambil: `Customer ID`, `Product ID`, dan `Line Total`. Ketiganya membentuk fondasi interaksi antara pengguna dan produk, yang sangat penting dalam collaborative filtering karena model ini mempelajari pola-pola pembelian dari data historis. `Line Total` berperan sebagai representasi dari "rating" atau tingkat ketertarikan pengguna terhadap suatu produk, sehingga semakin besar nilainya, diasumsikan semakin besar pula preferensinya. Proses filter `Line Total > 0` digunakan agar hanya transaksi nyata dan bermakna yang dianalisis—misalnya, menghindari data kosong, transaksi diskon penuh, pengembalian barang, atau kesalahan pencatatan. Selain itu, penggunaan `.copy()` berfungsi untuk menghindari potensi masalah pada pandas, seperti *SettingWithCopyWarning*, serta menjaga agar dataframe yang baru benar-benar terpisah dari dataframe asli.
 
----
+**Alasan:**
+
+Tanpa proses ini, model collaborative filtering bisa terpengaruh oleh data yang tidak valid atau tidak mencerminkan minat pengguna, sehingga menghasilkan rekomendasi yang bias atau tidak relevan. Menyaring data sejak awal membantu menjaga kualitas input bagi model dan mencegah hasil yang menyesatkan.
 
 **Perhitungan Rating Berdasarkan Nilai Transaksi**
 
