@@ -1148,7 +1148,68 @@ Berikut adalah versi **Evaluasi** yang telah diperbarui berdasarkan **data terba
 
 ## **Evaluasi**
 
-Evaluasi ini mencakup dua pendekatan utama dalam sistem rekomendasi: *Content-Based Filtering* (CBF) dan *Collaborative Filtering* (CF), berdasarkan hasil eksperimen terbaru.
+**METRIK EVALUASI**
+
+Sistem rekomendasi Anda menggunakan dua jenis pendekatan—*Content-Based Filtering* dan *Collaborative Filtering*—yang membutuhkan metrik evaluasi berbeda tergantung pada jenis output dan data yang dimiliki.
+
+---
+
+**1. Cosine Similarity (Untuk Content-Based Filtering)**
+
+**Formula:**
+
+$$
+\text{Cosine Similarity} = \frac{\vec{A} \cdot \vec{B}}{\|\vec{A}\| \times \|\vec{B}\|}
+$$
+
+**Keterangan:**
+
+* $\vec{A}, \vec{B}$ adalah vektor representasi produk (misalnya, hasil dari TF-IDF atau LSA).
+* Nilai berada pada rentang **\[-1, 1]**, namun dalam konteks TF-IDF umumnya berada di **\[0, 1]**.
+* Nilai yang mendekati 1 menunjukkan bahwa dua produk sangat mirip secara teks (fitur/konten).
+
+**Tujuan:**
+Mengukur tingkat kemiripan antara produk referensi dan produk lain berdasarkan representasi kontennya (deskripsi).
+
+---
+
+**2. Root Mean Square Error (RMSE) (Untuk Collaborative Filtering)**
+
+**Formula:**
+
+$$
+\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+$$
+
+**Keterangan:**
+
+* $y_i$: nilai rating sebenarnya dari user terhadap produk ke-$i$
+* $\hat{y}_i$: rating yang diprediksi oleh model
+* $n$: jumlah total observasi
+
+**Tujuan:**
+Menilai seberapa jauh prediksi model dari nilai aktual. Semakin kecil RMSE, semakin akurat model.
+
+---
+
+**3. Training Loss dan Validation Loss**
+
+Untuk model neural network seperti **RecommenderNet**, Anda menggunakan **MSE Loss** selama pelatihan.
+
+**Formula (Mean Squared Error - MSE):**
+
+$$
+\text{Loss} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+$$
+
+* MSE digunakan sebagai *loss function* untuk menghitung error selama proses training dan validasi.
+* Perbedaannya dengan RMSE hanyalah pada akar kuadrat di akhir.
+
+**Tujuan:**
+
+* **Training Loss**: mengukur kesalahan model pada data pelatihan.
+* **Validation Loss**: mengukur kesalahan model pada data yang tidak dilatih.
+* Digunakan untuk mendeteksi **overfitting** atau **underfitting**.
 
 ---
 
