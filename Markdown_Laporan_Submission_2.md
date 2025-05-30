@@ -499,10 +499,6 @@ Menghapus duplikat berdasarkan `Product ID` saja, sehingga satu produk hanya mun
 Untuk content-based filtering, setiap produk cukup direpresentasikan satu kali. Duplikasi produk akan membuat sistem rekomendasi membingungkan dan kurang efisien, karena bisa merekomendasikan item yang sama berulang kali.
 
 
-
-
-
-
 Berikut adalah bagian **Modeling** sesuai rubrik, dengan dua pendekatan berbeda untuk masing-masing: **Content-Based Filtering** dan **Collaborative Filtering**, disertai penjelasan lengkap, kode, top-N output, serta kelebihan dan kekurangan tiap pendekatan.
 
 ---
@@ -514,7 +510,7 @@ Untuk menyelesaikan permasalahan sistem rekomendasi dalam retail ini, digunakan 
 1. **Content-Based Filtering (CBF)**
 2. **Collaborative Filtering (CF)**
 
-Masing-masing pendekatan digunakan dengan **dua metode berbeda** untuk meningkatkan ketepatan dan variasi rekomendasi. Output dari kedua pendekatan adalah rekomendasi **Top-N produk** yang dipersonalisasi untuk pengguna.
+Masing-masing pendekatan digunakan dengan **dua metode berbeda** untuk meningkatkan ketepatan dan variasi rekomendasi. Output dari kedua pendekatan adalah rekomendasi **Top-N produk** yang dipersonalisasi untuk pengguna. Khusus untuk 
 
 ---
 
@@ -787,7 +783,7 @@ Kode tersebut adalah bagian dari tahap *data preparation* untuk membangun sistem
 
 Tanpa proses ini, model collaborative filtering bisa terpengaruh oleh data yang tidak valid atau tidak mencerminkan minat pengguna, sehingga menghasilkan rekomendasi yang bias atau tidak relevan. Menyaring data sejak awal membantu menjaga kualitas input bagi model dan mencegah hasil yang menyesatkan.
 
-**Perhitungan Rating Berdasarkan Nilai Transaksi**
+### **Perhitungan Rating Berdasarkan Nilai Transaksi**
 
 ```python
 cf_data['rating'] = np.log1p(cf_data['Line Total'])
@@ -796,13 +792,15 @@ cf_data['rating'] = scaler.fit_transform(cf_data[['rating']])
 ```
 
 **Penjelasan:**
+Transformasi log (`log1p`) digunakan untuk mengurangi efek nilai transaksi yang terlalu besar (outlier) dan membuat distribusi rating lebih normal.
+Selanjutnya, `MinMaxScaler` digunakan untuk mengubah rating ke skala seragam 0–1, agar model neural network dapat belajar lebih stabil.
 
-* Gunakan `log1p` untuk menstabilkan skala rating dan mengurangi pengaruh nilai ekstrem.
-* Lalu, gunakan `MinMaxScaler` untuk memastikan rating berada di skala 0–1.
+**Alasan:**
+Skala besar pada data transaksi bisa mendistorsi pembelajaran model. Normalisasi ini membuat model lebih sensitif terhadap pola, bukan terhadap skala absolut.
 
 ---
 
-**Encoding untuk User & Produk**
+### **Encoding untuk User & Produk**
 
 ```python
 user_ids = cf_data['Customer ID'].unique().tolist()
@@ -816,13 +814,14 @@ cf_data['product'] = cf_data['Product ID'].map(product2product_encoded)
 ```
 
 **Penjelasan:**
+ID pengguna dan produk diubah menjadi angka agar bisa digunakan sebagai indeks input ke dalam embedding layer pada neural network.
 
-* Encode `Customer ID` dan `Product ID` menjadi angka (integer), agar bisa diproses oleh embedding layer.
-* Dictionary ini juga berguna untuk mapping ulang hasil prediksi ke ID asli.
+**Alasan:**
+Model tidak bisa memproses ID string langsung, jadi perlu representasi numerik yang tetap menjaga hubungan antar entitas.
 
 ---
 
-**Finalisasi Dataset**
+### **Finalisasi Dataset**
 
 ```python
 cf_data = cf_data[['user', 'product', 'rating']]
@@ -833,13 +832,14 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_st
 ```
 
 **Penjelasan:**
+Dataset akhir disiapkan dalam bentuk input (`X`) dan target (`y`). Pembagian train–validation dilakukan agar model bisa diuji performanya.
 
-* Final dataset berisi user, product, dan rating.
-* Data dibagi 80:20 untuk pelatihan dan validasi.
+**Alasan:**
+Validasi diperlukan untuk mengevaluasi kemampuan generalisasi model terhadap data yang belum pernah dilihat saat training.
 
 ---
 
-**Pemeriksaan NaN dan Infinite Values**
+### **Pemeriksaan NaN dan Infinite Values**
 
 ```python
 print(np.isnan(X_train).sum(), np.isinf(X_train).sum())
@@ -847,9 +847,12 @@ print(np.isnan(y_train).sum(), np.isinf(y_train).sum())
 ```
 
 **Penjelasan:**
+Cek apakah ada data kosong (NaN) atau tak terhingga (inf) yang dapat menyebabkan error saat pelatihan.
 
-* Validasi data tidak mengandung nilai kosong atau tidak terdefinisi, yang akan membuat model gagal saat training.
----
+**Alasan:**
+Nilai-nilai tidak valid bisa membuat training gagal atau hasil model tidak akurat, jadi perlu dipastikan datanya bersih.
+
+
 ### **Pendekatan 1: Model Deep Learning – RecommenderNet**
 ---
 Model ini merupakan perluasan dari pendekatan Matrix Factorization. Selain menggunakan embedding untuk user dan item, RecommenderNet menambahkan lapisan-lapisan Dense dan Dropout, sehingga dapat mempelajari hubungan *non-linear* dan kompleks antar pengguna dan produk.
@@ -1150,6 +1153,42 @@ Pendekatan ini unggul dari segi efisiensi dan kesederhanaan. Namun, karena hanya
 
 Berikut adalah versi **Evaluasi** yang telah diperbarui berdasarkan **data terbaru dari dua pendekatan**: *Content-Based Filtering* dan *Collaborative Filtering*, sesuai data pelatihan terkini yang Anda berikan.
 
+
+Berikut ringkasan **kelebihan dan kekurangan** dari dua pendekatan *Collaborative Filtering* yang Anda gunakan:
+
+---
+
+
+
+### **1. RecommenderNet (Neural Network-based CF)**
+
+**Kelebihan:**
+
+* **Akurasi tinggi:** RMSE rendah baik pada training maupun validation.
+* **Mampu menangkap relasi kompleks** antar user dan item (non-linear).
+* **Adaptif:** Bisa dikembangkan dengan fitur tambahan seperti metadata atau embedding lanjutan.
+
+**Kekurangan:**
+
+* **Rentan overfitting** tanpa pengaturan EarlyStopping.
+* **Waktu pelatihan lebih lama** dan butuh sumber daya komputasi lebih besar.
+* **Sulit diinterpretasikan**, karena model bersifat “black box”.
+
+---
+
+### **2. Matrix Factorization (Dot Product of Embeddings)**
+
+**Kelebihan:**
+
+* **Sederhana dan cepat** dalam pelatihan.
+* **Stabil**, cocok sebagai baseline.
+* **Mudah diinterpretasi**, karena hasilnya berasal dari kombinasi linear faktor laten.
+
+**Kekurangan:**
+
+* **Akurasi lebih rendah**, terutama pada dataset besar atau kompleks.
+* **Terbatas dalam menangkap relasi non-linear** antara user dan item.
+* **Kurang fleksibel** jika ingin menambahkan fitur kontekstual.
 ---
 
 ## **Evaluasi**
