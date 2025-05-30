@@ -18,14 +18,6 @@ Model *content-based* yang digunakan dalam proyek ini memanfaatkan teknik TF-IDF
 
 Dalam industri ritel fashion, keberhasilan bisnis tidak hanya ditentukan oleh kualitas produk, tetapi juga oleh seberapa baik perusahaan memahami preferensi pelanggan dan memberikan pengalaman belanja yang relevan. Dengan semakin berkembangnya platform e-commerce dan bertambahnya jumlah pilihan produk, konsumen kini dihadapkan pada tantangan *choice overload*, di mana terlalu banyak pilihan justru dapat menghambat proses pengambilan keputusan. Hal ini menjadi alasan utama mengapa sistem rekomendasi sangat dibutuhkan, khususnya dalam sektor ritel fashion yang memiliki variasi produk yang sangat besar dan tren yang cepat berubah.
 
-Dataset yang digunakan dalam proyek ini adalah Data Fashion retail Global dari Kaggle
-
-Berikut adalah link tautan datasetnya:
-
-https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset
-
-Berisi 4 juta catatan penjualan, melibatkan 35 toko yang tersebar di 7 negara yang dimana berisi tentang berbagai brand, lokasi geografis, serta informasi tentang jenis dan kategori toko. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
-
 ### Problem Statements
 
 1. **Bagaimana toko retail fashion atau platform e-commerce dapat merekomendasikan jenis toko atau brand fashion yang relevan berdasarkan kesamaan atribut dan preferensi pelanggan?**
@@ -93,8 +85,7 @@ Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
 ### **Kondisi dan Kuantitas Data**
 
-Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi.
-
+Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
 ---
 
 ### **Deskripsi Variabel dan Atribut**
