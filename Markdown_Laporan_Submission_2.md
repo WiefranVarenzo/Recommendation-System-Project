@@ -1280,7 +1280,7 @@ Dua varian CBF dibandingkan: **TF-IDF + Cosine Similarity (Nearest Neighbor)** d
 | Aspek Evaluasi               | TF-IDF (Cosine Similarity)              | TF-IDF + LSA                             |
 | :--------------------------- | :-------------------------------------- | :--------------------------------------- |
 | **Produk Direkomendasikan**  | \[12876, 7342, 11543, 14267, 1632]      | Sama persis                              |
-| **Urutan dan Skor**          | Sama, rata-rata skor \~0.88             | Sama, perbedaan skor < 0.01              |
+| **Urutan dan Skor**          | Sama, rata-rata skor >0.8               | Sama, perbedaan skor < 0.01              |
 | **Relevansi Produk**         | Sangat tinggi, atribut produk konsisten | Identik, tidak ada peningkatan           |
 | **Kompleksitas Algoritma**   | Sederhana                               | Lebih kompleks (dengan dekomposisi SVD)  |
 | **Kecepatan Proses**         | Cepat                                   | Lebih lambat                             |
