@@ -439,8 +439,7 @@ transactions = transactions.drop_duplicates()
 * **Penjelasan**:
   Baris transaksi yang tidak lengkap dihapus agar tidak menyebabkan kesalahan saat penggabungan data dan analisis perilaku konsumen. Transaksi duplikat juga dihapus untuk menghindari pelaporan data penjualan yang berlebihan.
 
----
-
+  
 **Alasan Umum untuk Semua Dataset:**
 
 Menghapus nilai kosong penting untuk mencegah error selama proses analitik dan modeling, terutama ketika melakukan operasi seperti join, aggregasi, atau machine learning. Sementara itu, penghapusan duplikat sangat penting agar tidak terjadi distorsi data, seperti overestimasi jumlah pelanggan, produk populer palsu, atau transaksi fiktif. Karena jumlah data yang besar, penghapusan baris yang bermasalah ini tidak menyebabkan kehilangan informasi signifikan, tetapi justru meningkatkan kualitas data secara keseluruhan.
