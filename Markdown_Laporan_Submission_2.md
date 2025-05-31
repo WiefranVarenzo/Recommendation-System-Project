@@ -1210,6 +1210,7 @@ Pendekatan ini unggul dari segi efisiensi dan kesederhanaan. Namun, karena hanya
 **Formula:**
 
 $$
+
 \text{Cosine Similarity} = \frac{\vec{A} \cdot \vec{B}}{\|\vec{A}\| \times \|\vec{B}\|}
 $$
 
@@ -1270,7 +1271,7 @@ Dua varian CBF dibandingkan: **TF-IDF + Cosine Similarity (Nearest Neighbor)** d
 
 **1.1. Observasi Hasil Rekomendasi untuk Produk Referensi (Product 64):**
 
-* **Skor Similaritas:** Kedua metode menghasilkan skor tinggi pada 5 produk teratas (rata-rata \~0.88).
+* **Skor Similaritas:** Kedua metode menghasilkan skor tinggi pada 5 produk teratas (rata-rata >0.8 atau mendekati 1.0) Mengindikasikan bahwa hasil rekomendasi memang sudah tepat dan sudah sangat baik untuk mencari produk rekomendasi yang sesuai.
 * **Daftar Rekomendasi:** Kedua metode memberikan hasil **identik** dengan urutan dan isi yang sama: **\[12876, 7342, 11543, 14267, 1632]**.
 * **Profil Produk Target:** Produk 64 dideskripsikan sebagai **blazer pria berbahan suede**, bergaya maskulin, warna netral, berdasarkan kata kunci: `['suede', 'elegant', 'neutral', 'hooded', 'coat', 'xl', 'masculine', 'zipper', 'blazers', 'outerwear']`.
 
