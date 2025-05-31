@@ -1186,9 +1186,6 @@ Pendekatan ini unggul dari segi efisiensi dan kesederhanaan. Namun, karena hanya
 ## **Evaluasi**
 
 **METRIK EVALUASI**
-
-Sistem rekomendasi Anda menggunakan dua jenis pendekatan—*Content-Based Filtering* dan *Collaborative Filtering*—yang membutuhkan metrik evaluasi berbeda tergantung pada jenis output dan data yang dimiliki.
-
 ---
 
 **1. Cosine Similarity (Untuk Content-Based Filtering)**
@@ -1230,9 +1227,6 @@ Menilai seberapa jauh prediksi model dari nilai aktual. Semakin kecil RMSE, sema
 ---
 
 **3. Training Loss dan Validation Loss**
-
-Untuk model neural network seperti **RecommenderNet**, Anda menggunakan **MSE Loss** selama pelatihan.
-
 **Formula (Mean Squared Error - MSE):**
 
 $$
