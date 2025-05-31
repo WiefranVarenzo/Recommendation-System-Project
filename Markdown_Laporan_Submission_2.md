@@ -397,41 +397,56 @@ Pada tahap ini, dilakukan serangkaian teknik pembersihan dan pemrosesan data unt
 
 ---
 
-### 1. **Menghapus Nilai Kosong (Null)**
+### 1. **Pembersihan Data pada Setiap Dataset**
+
+#### a. Dataset `customers`
 
 ```python
 customers = customers.dropna(axis=0, how='any')
-products = products.dropna(axis=0, how='any')
-stores = stores.dropna(axis=0, how='any')
-transactions = transactions.dropna(axis=0, how='any')
+customers = customers.drop_duplicates()
 ```
 
-**Penjelasan:**
-Baris-baris yang mengandung nilai kosong (null) pada dataset `customers`, `products`, `stores`, dan `transactions` dihapus. Ini penting untuk memastikan tidak ada missing value yang mengganggu proses pemrosesan dan analisis data.
+* **Penjelasan**:
+  Nilai kosong (null) dalam baris data pelanggan dihapus untuk menghindari masalah saat analisis atau penggabungan data. Selanjutnya, baris duplikat juga dihapus agar tidak terjadi penghitungan ganda atau penyimpangan statistik dari data pelanggan.
 
-**Alasan:**
-Nilai kosong dapat menyebabkan error saat pemrosesan data lebih lanjut (misalnya saat join/merge), dan bisa mempengaruhi kualitas hasil analisis atau model. Karena jumlah data cukup besar, menghapus baris kosong tidak berdampak signifikan pada informasi yang hilang.
-
----
-
-### 2. **Menghapus Data Duplikat**
+#### b. Dataset `products`
 
 ```python
-customers = customers.drop_duplicates()
+products = products.dropna(axis=0, how='any')
 products = products.drop_duplicates()
+```
+
+* **Penjelasan**:
+  Setiap baris dengan nilai kosong dalam informasi produk dihapus untuk menjaga integritas data produk, misalnya nama, kategori, atau harga. Baris duplikat juga dihapus agar tidak terjadi perhitungan penjualan atau analisis performa produk yang salah.
+
+#### c. Dataset `stores`
+
+```python
+stores = stores.dropna(axis=0, how='any')
 stores = stores.drop_duplicates()
+```
+
+* **Penjelasan**:
+  Data toko yang memiliki nilai kosong dihapus agar tidak menimbulkan error ketika dilakukan analisis wilayah atau performa toko. Data duplikat juga dihapus agar tidak terjadi pengulangan identitas toko yang dapat menyesatkan analisis lokasi.
+
+#### d. Dataset `transactions`
+
+```python
+transactions = transactions.dropna(axis=0, how='any')
 transactions = transactions.drop_duplicates()
 ```
 
-**Penjelasan:**
-Menghapus baris duplikat dari masing-masing dataset. Duplikat dapat terjadi akibat penggabungan data dari berbagai sumber atau kesalahan pencatatan.
-
-**Alasan:**
-Duplikat dapat menyebabkan distorsi statistik, misalnya membuat suatu produk tampak lebih populer dari sebenarnya. Oleh karena itu, menghapus duplikat meningkatkan validitas dan akurasi analisis.
+* **Penjelasan**:
+  Baris transaksi yang tidak lengkap dihapus agar tidak menyebabkan kesalahan saat penggabungan data dan analisis perilaku konsumen. Transaksi duplikat juga dihapus untuk menghindari pelaporan data penjualan yang berlebihan.
 
 ---
 
-### 3. **Menghapus Transaksi Tidak Valid**
+**Alasan Umum untuk Semua Dataset:**
+
+Menghapus nilai kosong penting untuk mencegah error selama proses analitik dan modeling, terutama ketika melakukan operasi seperti join, aggregasi, atau machine learning. Sementara itu, penghapusan duplikat sangat penting agar tidak terjadi distorsi data, seperti overestimasi jumlah pelanggan, produk populer palsu, atau transaksi fiktif. Karena jumlah data yang besar, penghapusan baris yang bermasalah ini tidak menyebabkan kehilangan informasi signifikan, tetapi justru meningkatkan kualitas data secara keseluruhan.
+
+---
+### 2. **Menghapus Transaksi Tidak Valid**
 
 ```python
 transactions = transactions.dropna(subset=['Customer ID', 'Product ID', 'Store ID', 'Quantity'])
@@ -445,7 +460,7 @@ Data ini krusial untuk proses filtering, karena transaksi tanpa informasi terseb
 
 ---
 
-### 4. **Menggabungkan Keempat Dataset**
+### 3. **Menggabungkan Keempat Dataset**
 
 ```python
 df = transactions.merge(customers, on='Customer ID', how='inner') \
@@ -461,7 +476,7 @@ Proses ini menyatukan semua informasi penting dalam satu dataframe (`df`) agar s
 
 ---
 
-### 5. **Memilih Kolom Relevan untuk Pemodelan**
+### 4. **Memilih Kolom Relevan untuk Pemodelan**
 
 ```python
 df = df[['Customer ID',
@@ -486,7 +501,7 @@ Mengurangi kompleksitas data dengan hanya mempertahankan fitur yang relevan dan 
 
 ---
 
-### 6. **Menghapus Duplikat Produk**
+### 5. **Menghapus Duplikat Produk**
 
 ```python
 df = df.drop_duplicates(subset=['Product ID'])
@@ -811,10 +826,13 @@ product2product_encoded = {x: i for i, x in enumerate(product_ids)}
 
 cf_data['user'] = cf_data['Customer ID'].map(user2user_encoded)
 cf_data['product'] = cf_data['Product ID'].map(product2product_encoded)
+
+num_users = len(user2user_encoded)
+num_products = len(product2product_encoded)
 ```
 
 **Penjelasan:**
-ID pengguna dan produk diubah menjadi angka agar bisa digunakan sebagai indeks input ke dalam embedding layer pada neural network.
+ID pengguna dan produk diubah menjadi angka agar bisa digunakan sebagai indeks input ke dalam embedding layer pada neural network. Lalu menetapkan nilai jumlah users dan products.
 
 **Alasan:**
 Model tidak bisa memproses ID string langsung, jadi perlu representasi numerik yang tetap menjaga hubungan antar entitas.
