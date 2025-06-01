@@ -74,12 +74,7 @@ Pendekatan ini menggunakan pola perilaku pengguna (interaksi, preferensi, atau p
 
 ## **Data Understanding**
 
-Dataset yang digunakan dalam proyek ini berjudul **"Global Fashion Retail Sales"**, yang diambil dari [Kaggle Repository](https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset?select=transactions.csv). 
-Atau, bisa mengakses melalui link berikut:
-
-https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset?select=transactions.csv
-
-Dataset ini terdiri dari data penjualan global dari sebuah perusahaan fashion retail dan mencakup berbagai aspek penting seperti transaksi, pelanggan, produk, dan toko.
+Dataset yang digunakan dalam proyek ini berjudul **"Global Fashion Retail Sales"**, yang diambil dari [Kaggle Repository](https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset?select=transactions.csv). Dataset ini terdiri dari data penjualan global dari sebuah perusahaan fashion retail dan mencakup berbagai aspek penting seperti transaksi, pelanggan, produk, dan toko.
 
 Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
@@ -90,11 +85,10 @@ Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
 ### **Kondisi dan Kuantitas Data**
 
-Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
+Dataset mencakup 4540404 data baris transaksi (Berdasarkan Invoice), lalu total ada 6,416,827 baris data di dataset transaksi (ini bisa dilihat dari transactions.info()), kemudian terdapat  17940 data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak cukup bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Sizes` dan `Color` di dataset transactions yang memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
 
 
 ---
-
 ### **Deskripsi Variabel dan Atribut**
 
 #### **1. Transaksi (Sales Transaction Dataset)**
@@ -180,16 +174,17 @@ Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data t
 
    >![alt text](images/image.png)
 
-   Dari hasil preview, terlihat bahwa data pelanggan memiliki informasi seperti `Customer ID`, `Gender`, `Date Of Birth`, dan lainnya.
-   ``` python
-   print('Jumlah data pelanggan: ', len(customers['Customer ID'].unique()))
-   ```
-   Jumlah unik pelanggan dihitung dengan:
-
-   > Jumlah data pelanggan: 1,643,306
+   Dari hasil preview, terlihat bahwa data pelanggan memiliki informasi seperti `Customer ID`, `Gender`, 
 
 2. **Informasi Kolom dan Tipe Data**
 
+    `Date Of Birth`, dan lainnya.
+    ``` python
+    print('Jumlah data pelanggan: ', len(customers['Customer ID'].unique()))
+    ```
+    Jumlah unik pelanggan dihitung dengan:
+
+    > Jumlah data pelanggan: 1,643,306
    >![alt text](images/image-1.png)
 
    Dapat disimpulkan bahwa kolom memiliki tipe data yang sesuai, meskipun perlu penyesuaian pada `Date Of Birth` agar bertipe datetime. Lalu bisa kita lihat terdapat perbedaan atau ketidak-samaan untuk jumlah data Job Title dibandingkan kolom lainnya.
@@ -266,7 +261,22 @@ Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data t
 
    Seluruh kolom memiliki tipe data yang sesuai, namun terdapat perbedaan jumlah di Sizes dan juga Color. Hal ini bisa mengindikasikan adanya null atau memang mereka ada yang duplikat.
 
-4. **Distribusi Kategori dan Sub-Kategori**
+4. **Pemeriksaan Nilai Kosong dan Duplikat**
+
+   > ![alt text](image-27.png)
+
+   Ditemukan 12445 data null pada kolom Color dan 2070 data null pada kolom sizes di dataset product.
+
+    ```python
+    products.duplicated().sum()
+    ```
+
+   Terdapat 0 data duplikat:
+
+   > `np.int64(0)`
+
+
+5. **Distribusi Kategori dan Sub-Kategori**
 
    > ![alt text](images/image-7.png)
 
@@ -311,8 +321,21 @@ Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data t
     | 17  | Store Birmingham      | 35  | Store Coimbra            |
     | 18  | Store Glasgow         |     |                          |
 
+3. **Pemeriksaan Nilai Kosong dan Duplikat**
 
-3. **Pemetaan dan Visualisasi Negara**
+   > ![alt text](images/image-28.png)
+
+   Ditemukan 0 data null di dataset stores.
+
+    ```python
+    stores.duplicated().sum()
+    ```
+
+   Terdapat 0 data duplikat di dataset stores:
+
+   > `np.int64(0)`
+
+4. **Pemetaan dan Visualisasi Negara**
 
    Setelah memetakan nama negara ke karakter Latin:
 
@@ -338,37 +361,50 @@ Dataset mencakup 4540404 data baris transaksi, 17900 ribu data produk, 35 data t
 
    Untuk setiap tipe data tidak ada yang aneh, serta bisa kita lihat bahwa di dataset ini berhubungan (foreign key) terhadap ID di dataset lainnya, hal ini bisa kita gunakan untuk melakukan merge data.
 
-2. **Distribusi Metode Pembayaran**
+2. **Pemeriksaan Nilai Kosong dan Duplikat**
+
+   > ![alt text](images/image-29.png)
+   Ditemukan 413102 data null di kolom size, dan 4350783 di kolom Color dataset transactions.
+
+    ```python
+    transactions.duplicated().sum()
+    ```
+
+   Terdapat 798 data duplikat di dataset transactions:
+
+   > `np.int64(798)`
+
+3. **Distribusi Metode Pembayaran**
 
    > ![alt text](images/image-12.png)
 
    Metode pembayaran dengan frekuensi tertinggi menunjukkan preferensi pelanggan terhadap metode tertentu. Bisa kita lihat kalau yang paling sering digunakan oleh pelanggan adalah Credit Card
 
-3. **Distribusi Tipe Transaksi**
+4. **Distribusi Tipe Transaksi**
 
    > ![alt text](images/image-14.png)
 
    Mayoritas transaksi merupakan pembelian, dengan sebagian kecil berupa pengembalian.
 
-4. **Tren Penjualan Harian**
+5. **Tren Penjualan Harian**
 
    > ![alt text](images/image-15.png)
 
    Penjualan harian menunjukkan fluktuasi musiman dengan beberapa puncak penjualan tertentu. Seperti di Akhir tahun yang memiliki lonjakan cukup tinggi karena adanya natal dan tahun baru.
 
-5. **Korelasi antar Fitur Numerik Transaksi**
+6. **Korelasi antar Fitur Numerik Transaksi**
 
    > ![alt text](images/image-16.png)
 
    Unit Price memiliki korelasi positif kuat dengan Line Total dan Invoice Total, yang menunjukkan bahwa semakin tinggi harga satuan, semakin besar nilai total transaksi, terutama jika jumlah dan diskon relatif stabil.
 
-6. **Top Produk Berdasarkan Jumlah Terjual**
+7. **Top Produk Berdasarkan Jumlah Terjual**
 
    > ![alt text](images/image-18.png)
 
    Produk dari sub-kategori tertentu mendominasi penjualan, seperti hal nya , Sportswear, dan Coat & Blazer memiliki top 3 produk terlaris
 
-7. **Top Produk Berdasarkan Pendapatan**
+8. **Top Produk Berdasarkan Pendapatan**
 
    > ![alt text](images/image-19.png)
 
@@ -393,73 +429,28 @@ Namun masih ada beberapa hal yang harus diperhatikan, seperti:
 
 ## **Data Preparation**
 
-Pada tahap ini, dilakukan serangkaian teknik pembersihan dan pemrosesan data untuk memastikan dataset bersih, konsisten, dan siap digunakan dalam modeling content-based filtering (CBF) dan collaborative filtering (CF). Berikut penjelasan setiap tahapan secara berurutan:
+Pada tahap ini, dilakukan serangkaian teknik pembersihan dan pemrosesan data untuk memastikan dataset bersih, konsisten, dan siap digunakan dalam modeling sistem rekomendasi berbasis **Content-Based Filtering (CBF)** dan **Collaborative Filtering (CF)**. Berikut penjelasan lengkap setiap tahapan secara berurutan yang dimulai dari pembersihan data (Preprocessing):
 
----
+### 1. **Menghapus Nilai Kosong (Null) dan Data Duplikat**
 
-### 1. **Pembersihan Data pada Setiap Dataset**
-
-#### a. Dataset `customers`
-
-```python
-customers = customers.dropna(axis=0, how='any')
-customers = customers.drop_duplicates()
-```
-
-* **Penjelasan**:
-  Nilai kosong (null) dalam baris data pelanggan dihapus untuk menghindari masalah saat analisis atau penggabungan data. Selanjutnya, baris duplikat juga dihapus agar tidak terjadi penghitungan ganda atau penyimpangan statistik dari data pelanggan.
-
-#### b. Dataset `products`
-
-```python
-products = products.dropna(axis=0, how='any')
-products = products.drop_duplicates()
-```
-
-* **Penjelasan**:
-  Setiap baris dengan nilai kosong dalam informasi produk dihapus untuk menjaga integritas data produk, misalnya nama, kategori, atau harga. Baris duplikat juga dihapus agar tidak terjadi perhitungan penjualan atau analisis performa produk yang salah.
-
-#### c. Dataset `stores`
-
-```python
-stores = stores.dropna(axis=0, how='any')
-stores = stores.drop_duplicates()
-```
-
-* **Penjelasan**:
-  Data toko yang memiliki nilai kosong dihapus agar tidak menimbulkan error ketika dilakukan analisis wilayah atau performa toko. Data duplikat juga dihapus agar tidak terjadi pengulangan identitas toko yang dapat menyesatkan analisis lokasi.
-
-#### d. Dataset `transactions`
-
-```python
-transactions = transactions.dropna(axis=0, how='any')
-transactions = transactions.drop_duplicates()
-```
-
-* **Penjelasan**:
-  Baris transaksi yang tidak lengkap dihapus agar tidak menyebabkan kesalahan saat penggabungan data dan analisis perilaku konsumen. Transaksi duplikat juga dihapus untuk menghindari pelaporan data penjualan yang berlebihan.
-
-  
-**Alasan Umum untuk Semua Dataset:**
-
-Menghapus nilai kosong penting untuk mencegah error selama proses analitik dan modeling, terutama ketika melakukan operasi seperti join, aggregasi, atau machine learning. Sementara itu, penghapusan duplikat sangat penting agar tidak terjadi distorsi data, seperti overestimasi jumlah pelanggan, produk populer palsu, atau transaksi fiktif. Karena jumlah data yang besar, penghapusan baris yang bermasalah ini tidak menyebabkan kehilangan informasi signifikan, tetapi justru meningkatkan kualitas data secara keseluruhan.
-
----
-### 2. **Menghapus Transaksi Tidak Valid**
-
-```python
-transactions = transactions.dropna(subset=['Customer ID', 'Product ID', 'Store ID', 'Quantity'])
-```
+    ```python
+    customers = customers.dropna(axis=0, how='any').drop_duplicates()
+    products = products.dropna(axis=0, how='any').drop_duplicates()
+    stores = stores.dropna(axis=0, how='any').drop_duplicates()
+    transactions = transactions.dropna(axis=0, how='any').drop_duplicates()
+    ```
 
 **Penjelasan:**
-Menghapus baris transaksi yang tidak memiliki `Customer ID`, `Product ID`, `Store ID`, atau `Quantity`.
+Setiap dataset (`customers`, `products`, `stores`, `transactions`) dibersihkan dengan menghapus baris yang memiliki nilai kosong (`dropna`) dan kemudian dihapus data duplikatnya (`drop_duplicates`).
 
 **Alasan:**
-Data ini krusial untuk proses filtering, karena transaksi tanpa informasi tersebut tidak bisa dipetakan ke pelanggan atau produk tertentu, dan oleh karena itu tidak bisa digunakan dalam pemodelan rekomendasi.
+- Missing value dapat menyebabkan error saat proses join/merge.
+- Data duplikat bisa menyebabkan bias pada analisis dan model, misalnya membuat suatu produk tampak lebih populer dari sebenarnya.
+- Dataset cukup besar sehingga penghapusan tidak berdampak signifikan pada informasi keseluruhan.
 
 ---
 
-### 3. **Menggabungkan Keempat Dataset**
+### 2. **Menggabungkan Keempat Dataset**
 
 ```python
 df = transactions.merge(customers, on='Customer ID', how='inner') \
@@ -468,336 +459,83 @@ df = transactions.merge(customers, on='Customer ID', how='inner') \
 ```
 
 **Penjelasan:**
-Dataset transaksi digabung dengan data pelanggan, produk, dan toko menggunakan `Customer ID`, `Product ID`, dan `Store ID` secara berturut-turut.
+Dataset transaksi digabung dengan data pelanggan, produk, dan toko menggunakan `Customer ID`, `Product ID`, dan `Store ID` secara berturut-turut melalui metode `inner join`.
 
 **Alasan:**
 Proses ini menyatukan semua informasi penting dalam satu dataframe (`df`) agar siap digunakan untuk analisis dan pemodelan, baik berdasarkan interaksi pengguna maupun konten produk.
 
 ---
 
-### 4. **Memilih Kolom Relevan untuk Pemodelan**
+### 3. **Memeriksa Hasil Penggabungan**
 
 ```python
-df = df[['Customer ID',
-         'Product ID',
-         'Store Name',
-         'Quantity',
-         'Line Total',
-         'Date',
-         'Category',
-         'Sub Category',
-         'Color_y',
-         'Sizes',
-         'Description EN',
-         'Production Cost']]
+print(df.info())
+print(df.isnull().sum())
 ```
 
 **Penjelasan:**
-Hanya kolom-kolom yang dibutuhkan untuk content-based dan collaborative filtering yang dipertahankan.
+Setelah penggabungan, dilakukan pengecekan struktur data (`info()`) dan keberadaan nilai null (`isnull().sum()`).
 
-**Alasan:**
-Mengurangi kompleksitas data dengan hanya mempertahankan fitur yang relevan dan informatif untuk proses rekomendasi. Kolom seperti `Description EN`, `Color_y`, dan `Sub Category` penting untuk content-based filtering, sedangkan `Customer ID`, `Product ID`, dan `Line Total` relevan untuk collaborative filtering.
+**Hasil:**
+Tidak ditemukan nilai null pada dataset gabungan. Seluruh data sudah bersih dan siap diproses lebih lanjut.
 
 ---
+**Persiapan data Content-Based Filtering**
+---
 
-### 5. **Menghapus Duplikat Produk**
+### 4. **Memilih Kolom Relevan untuk Content-Based Filtering**
 
 ```python
-df = df.drop_duplicates(subset=['Product ID'])
+df_cbf = df[['Product ID', 'Category', 'Sub Category', 'Color_y', 'Sizes', 'Description EN']].copy()
+df_cbf = df_cbf.drop_duplicates(subset=['Product ID']).reset_index(drop=True)
 ```
 
 **Penjelasan:**
-Menghapus duplikat berdasarkan `Product ID` saja, sehingga satu produk hanya muncul sekali dalam dataframe akhir.
+Hanya kolom-kolom yang relevan untuk content-based filtering yang dipertahankan. Setelah itu, dilakukan penghapusan duplikat berdasarkan `Product ID`.
 
 **Alasan:**
-Untuk content-based filtering, setiap produk cukup direpresentasikan satu kali. Duplikasi produk akan membuat sistem rekomendasi membingungkan dan kurang efisien, karena bisa merekomendasikan item yang sama berulang kali.
-
-
-Berikut adalah bagian **Modeling** sesuai rubrik, dengan dua pendekatan berbeda untuk masing-masing: **Content-Based Filtering** dan **Collaborative Filtering**, disertai penjelasan lengkap, kode, top-N output, serta kelebihan dan kekurangan tiap pendekatan.
+- Untuk CBF, hanya butuh informasi kontekstual produk seperti kategori, warna, ukuran, dan deskripsi.
+- Menghindari duplikasi produk agar sistem tidak merekomendasikan item yang sama berulang kali.
 
 ---
 
-## **Modeling**
-
-Untuk menyelesaikan permasalahan sistem rekomendasi dalam retail ini, digunakan dua pendekatan utama:
-
-1. **Content-Based Filtering (CBF)**
-2. **Collaborative Filtering (CF)**
-
-Masing-masing pendekatan digunakan dengan **dua metode berbeda** untuk meningkatkan ketepatan dan variasi rekomendasi. Output dari kedua pendekatan adalah rekomendasi **Top-N produk** yang dipersonalisasi untuk pengguna. Khusus untuk 
-
----
-
-**1. Content-Based Filtering (CBF)**
----
-Content-Based Filtering merekomendasikan produk berdasarkan **kemiripan deskriptif antara item satu dengan lainnya**. Pendekatan ini cocok untuk kasus di mana kita ingin memberikan rekomendasi produk yang mirip dengan produk yang sudah pernah dilihat, dibeli, atau disukai pengguna.
-
-CBF tidak membutuhkan data riwayat interaksi antar pengguna sehingga sangat cocok untuk menghindari masalah *cold-start user*. Pendekatan ini berfokus pada konten atau atribut dari produk itu sendiri.
-
----
-
-#### **Pendekatan 1: TF-IDF + Nearest Neighbors (Cosine Similarity)**
-
-Pendekatan ini mengubah teks deskriptif produk menjadi representasi numerik menggunakan TF-IDF, kemudian mencari produk yang paling mirip menggunakan algoritma Nearest Neighbors berbasis cosine similarity.
+### 5. **Gabungan Fitur dan TF-IDF Encoding**
 
 ```python
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.neighbors import NearestNeighbors
-```
+df_cbf['combined_features'] = df_cbf['Category'].astype(str) + ' ' + df_cbf['Sub Category'].astype(str) + ' ' + df_cbf['Color_y'].astype(str) + ' ' + df_cbf['Sizes'].astype(str) + ' ' + df_cbf['Description EN'].astype(str)
 
-##### **Langkah 1: Gabungkan fitur deskriptif produk**
-
-```python
-# Gabungkan beberapa kolom teks menjadi satu kolom untuk representasi konten produk
-df['content'] = df['Category'] + ' ' + df['Sub Category'] + ' ' + df['Color_y'] + ' ' + df['Sizes'] + ' ' + df['Description EN']
-```
-
-> *Penjelasan:* Kita menggabungkan fitur-fitur deskriptif utama dari produk yang bersifat teks (seperti kategori, warna, ukuran, dan deskripsi) menjadi satu kolom string untuk membentuk “konten deskriptif” dari masing-masing produk. Ini penting karena CBF bekerja dengan data tekstual.
-
----
-
-##### **Langkah 2: TF-IDF Vectorization**
-
-```python
-# Lakukan vektorisasi menggunakan TF-IDF
 tfidf = TfidfVectorizer(stop_words='english')
-tfidf_matrix = tfidf.fit_transform(df['content'])
+tfidf_matrix = tfidf.fit_transform(df_cbf['combined_features'])
 ```
 
-> *Penjelasan:* TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. TF-IDF menekankan kata-kata yang unik dan mengurangi bobot kata-kata umum. Ini memungkinkan kita mengukur kemiripan antar produk berdasarkan fitur konten yang paling membedakan.
+**Penjelasan:**
+Fitur teks dari produk digabungkan menjadi satu kolom (`combined_features`) lalu diubah menjadi representasi numerik menggunakan **TF-IDF (Term Frequency-Inverse Document Frequency)**.
+
+**Alasan:**
+- TF-IDF membantu mengubah teks menjadi vektor yang dapat dihitung kemiripannya.
+- Membantu sistem menemukan produk dengan konten mirip berdasarkan deskripsi dan fitur produk.
 
 ---
-
-##### **Langkah 3: Membangun model Nearest Neighbors**
-
-```python
-# Inisialisasi model Nearest Neighbors menggunakan cosine similarity
-model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
-model_knn.fit(tfidf_matrix)
-```
-
-> *Penjelasan:* Kita menggunakan model Nearest Neighbors untuk menemukan produk yang paling dekat berdasarkan vektor TF-IDF. Metode cosine similarity mengukur sudut antar vektor, sehingga efektif untuk data teks.
-
+**Persiapan data Collaborative Filtering**
 ---
 
-##### **Langkah 4: Pemetaan indeks produk**
+### 6. **Persiapan Data untuk Collaborative Filtering**
 
-```python
-# Pemetaan ID Produk ke indeks DataFrame
-product_id_to_index = pd.Series(df.index, index=df['Product ID'])
-```
-
-> *Penjelasan:* Digunakan untuk mengakses baris produk berdasarkan `Product ID` secara efisien saat melakukan pencarian rekomendasi.
-
----
-
-##### **Langkah 5: Fungsi rekomendasi**
-
-```python
-# Fungsi untuk menghasilkan rekomendasi Top-N
-def get_recommendations(product_id, top_n=5):
-    if product_id not in product_id_to_index:
-        return f"Product ID {product_id} not found."
-
-    idx = product_id_to_index[product_id]
-    distances, indices_nn = model_knn.kneighbors(tfidf_matrix[idx], n_neighbors=top_n + 1)
-
-    recommendations = []
-    for i in range(1, top_n + 1):  # Lewati indeks pertama (produk itu sendiri)
-        recommended_product = {
-            'Product ID': df.iloc[indices_nn[0][i]]['Product ID'],
-            'Description': df.iloc[indices_nn[0][i]]['Description EN'],
-            'Similarity': 1 - distances[0][i]  # karena cosine distance, semakin kecil = lebih mirip
-        }
-        recommendations.append(recommended_product)
-
-    return recommendations
-```
-
-> *Penjelasan:* Fungsi ini mencari produk yang paling mirip dengan produk referensi dan menampilkan hasil rekomendasi dalam bentuk deskripsi dan skor kemiripan.
-
----
-
-**Contoh Output:**
-
-```python
-get_recommendations('64', top_n=5)
-```
----
-
-| No. | Product ID | Category  | Sub Category      | Description EN                       | Color   |
-| --- | ---------- | --------- | ----------------- | ------------------------------------ | ------- |
-| 1   | 9621       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Buttons | NEUTRAL |
-| 2   | 7281       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Glitter | NEUTRAL |
-| 3   | 11998      | Masculine | Coats and Blazers | Executive Neutral Suede With Glitter | NEUTRAL |
-| 4   | 14988      | Masculine | Coats and Blazers | Neutral Suede Boho With Buttons      | NEUTRAL |
-| 5   | 1494       | Masculine | Coats and Blazers | Luxurious Neutral Nylon With Pockets | NEUTRAL |
-
-**Top TF-IDF NearestNeighbors Words:**
-| Rank | Word      |
-| ---- | --------- |
-| 1    | neutral   |
-| 2    | suede     |
-| 3    | luxurious |
-| 4    | hood      |
-| 5    | blazers   |
-| 6    | xxl       |
-| 7    | coats     |
-| 8    | masculine |
-| 9    | xl        |
-| 10   | ziper     |
-
-
-**Kelebihan Pendekatan Ini:**
-
-* Cepat dan mudah diterapkan.
-* Tidak memerlukan data interaksi pengguna.
-* Konsisten memberikan rekomendasi berdasarkan kemiripan deskriptif yang jelas.
-
-**Kekurangan Pendekatan Ini:**
-
-* Jika deskripsi produk tidak lengkap, performa akan menurun.
-* Tidak mempertimbangkan popularitas atau rating produk.
-* Kurang efektif untuk menangkap konteks semantik yang lebih dalam.
-
----
-
-#### **Pendekatan 2: TF-IDF + LSA (Latent Semantic Analysis / Truncated SVD)**
-
-Pendekatan ini memperbaiki kekurangan sebelumnya dengan menambahkan proses **reduksi dimensi menggunakan TruncatedSVD** untuk membentuk representasi semantik yang lebih mendalam.
-
----
-
-##### **Langkah 1: Vektorisasi dengan TF-IDF**
-
-```python
-from sklearn.decomposition import TruncatedSVD
-from sklearn.metrics.pairwise import cosine_similarity
-
-# Lakukan TF-IDF ulang
-tfidf = TfidfVectorizer(stop_words='english')
-tfidf_matrix = tfidf.fit_transform(df['content'])
-```
-
----
-
-##### **Langkah 2: Reduksi dimensi dengan LSA**
-
-```python
-# Reduksi dimensi dengan LSA (Truncated SVD)
-lsa = TruncatedSVD(n_components=100)
-lsa_matrix = lsa.fit_transform(tfidf_matrix)
-```
-
-> *Penjelasan:* LSA atau Latent Semantic Analysis mengubah TF-IDF menjadi representasi latent dengan memetakan kata ke dalam topik-topik semantik tersembunyi. Ini membantu mengenali sinonim atau kata dengan makna serupa.
-
----
-
-##### **Langkah 3: Hitung cosine similarity**
-
-```python
-# Hitung kemiripan antar produk
-similarity_matrix = cosine_similarity(lsa_matrix)
-```
-
-> *Penjelasan:* Kemiripan dihitung berdasarkan representasi semantik hasil reduksi dimensi, yang lebih “dalam” dibanding TF-IDF murni.
-
----
-
-##### **Langkah 4: Fungsi rekomendasi dengan LSA**
-
-```python
-# Pemetaan ID Produk
-product_id_to_index = pd.Series(df.index, index=df['Product ID'])
-
-# Fungsi rekomendasi
-def get_lsa_recommendations(product_id, top_n=5):
-    if product_id not in product_id_to_index:
-        return f"Product ID {product_id} not found."
-
-    idx = product_id_to_index[product_id]
-    sim_scores = list(enumerate(similarity_matrix[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-
-    recommendations = []
-    for i in range(1, top_n + 1):
-        recommended_product = {
-            'Product ID': df.iloc[sim_scores[i][0]]['Product ID'],
-            'Description': df.iloc[sim_scores[i][0]]['Description EN'],
-            'Similarity': sim_scores[i][1]
-        }
-        recommendations.append(recommended_product)
-
-    return recommendations
-```
-
----
-
-**Contoh Output:**
-
-```python
-get_lsa_recommendations('P00123', top_n=5)
-```
-Hasil Top-N atau hasil rekomendasi produk:
-
-| No. | Product ID | Category  | Sub Category      | Description EN                       | Color   |
-| --- | ---------- | --------- | ----------------- | ------------------------------------ | ------- |
-| 1   | 9621       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Buttons | NEUTRAL |
-| 2   | 7281       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Glitter | NEUTRAL |
-| 3   | 11998      | Masculine | Coats and Blazers | Executive Neutral Suede With Glitter | NEUTRAL |
-| 4   | 14988      | Masculine | Coats and Blazers | Neutral Suede Boho With Buttons      | NEUTRAL |
-| 5   | 1494       | Masculine | Coats and Blazers | Luxurious Neutral Nylon With Pockets | NEUTRAL |
-
-Top Words in LSA for Product:
-| Rank | Word        |
-| ---- | ----------- |
-| 1    | sheet       |
-| 2    | red         |
-| 3    | stamped     |
-| 4    | boho        |
-| 5    | sweatshirts |
-| 6    | sweaters    |
-| 7    | xxl         |
-| 8    | masculine   |
-| 9    | xl          |
-| 10   | ziper       |
-
-
----
-
-**Kelebihan Pendekatan Ini:**
-
-* Lebih akurat dalam menangkap hubungan semantik antar produk.
-* Cocok untuk menangani sinonim atau variasi deskripsi.
-* Mengurangi risiko overfitting pada data yang panjang.
-
-**Kekurangan Pendekatan Ini:**
-
-* Komputasi lebih berat (terutama saat training).
-* Hasil lebih sulit diinterpretasi karena tidak langsung mengacu pada kata-kata aslinya.
-* Pemilihan jumlah komponen (n\_components) harus hati-hati agar tidak kehilangan informasi penting.
-
----
-**2. Collaborative Filtering (CF)**
----
-
-Collaborative Filtering memanfaatkan **interaksi antar pengguna** (transaksi) untuk memberikan rekomendasi berdasarkan kesamaan perilaku pengguna. CF cocok untuk menangkap pola tersembunyi dari data interaksi.
-#### **Persiapan Data Collaborative Filtering**
-**"User-Item Interaction Filtering"**
 ```python
 cf_data = df[['Customer ID', 'Product ID', 'Line Total']].copy()
 cf_data = cf_data[cf_data['Line Total'] > 0].copy()
 ```
 
 **Penjelasan:**
-
-Kode tersebut adalah bagian dari tahap *data preparation* untuk membangun sistem rekomendasi berbasis *collaborative filtering*. Di sini, hanya tiga kolom utama yang diambil: `Customer ID`, `Product ID`, dan `Line Total`. Ketiganya membentuk fondasi interaksi antara pengguna dan produk, yang sangat penting dalam collaborative filtering karena model ini mempelajari pola-pola pembelian dari data historis. `Line Total` berperan sebagai representasi dari "rating" atau tingkat ketertarikan pengguna terhadap suatu produk, sehingga semakin besar nilainya, diasumsikan semakin besar pula preferensinya. Proses filter `Line Total > 0` digunakan agar hanya transaksi nyata dan bermakna yang dianalisis—misalnya, menghindari data kosong, transaksi diskon penuh, pengembalian barang, atau kesalahan pencatatan. Selain itu, penggunaan `.copy()` berfungsi untuk menghindari potensi masalah pada pandas, seperti *SettingWithCopyWarning*, serta menjaga agar dataframe yang baru benar-benar terpisah dari dataframe asli.
+Hanya kolom-kolom penting untuk collaborative filtering yang dipilih (`Customer ID`, `Product ID`, `Line Total`). Transaksi dengan `Line Total` ≤ 0 dihapus karena tidak valid.
 
 **Alasan:**
+- `Line Total` merepresentasikan kontribusi pembelian terhadap pendapatan.
+- Hanya transaksi positif yang relevan untuk mengukur minat pengguna.
 
-Tanpa proses ini, model collaborative filtering bisa terpengaruh oleh data yang tidak valid atau tidak mencerminkan minat pengguna, sehingga menghasilkan rekomendasi yang bias atau tidak relevan. Menyaring data sejak awal membantu menjaga kualitas input bagi model dan mencegah hasil yang menyesatkan.
+---
 
-### **Perhitungan Rating Berdasarkan Nilai Transaksi**
+### 7. **Transformasi Logaritma Natural dan Normalisasi Rating**
 
 ```python
 cf_data['rating'] = np.log1p(cf_data['Line Total'])
@@ -806,15 +544,15 @@ cf_data['rating'] = scaler.fit_transform(cf_data[['rating']])
 ```
 
 **Penjelasan:**
-Transformasi log (`log1p`) digunakan untuk mengurangi efek nilai transaksi yang terlalu besar (outlier) dan membuat distribusi rating lebih normal.
-Selanjutnya, `MinMaxScaler` digunakan untuk mengubah rating ke skala seragam 0–1, agar model neural network dapat belajar lebih stabil.
+Nilai `Line Total` ditransformasi menggunakan fungsi logaritma natural (`log1p`) untuk mengurangi skewness, lalu dinormalisasi ke rentang [0,1] menggunakan `MinMaxScaler`.
 
 **Alasan:**
-Skala besar pada data transaksi bisa mendistorsi pembelajaran model. Normalisasi ini membuat model lebih sensitif terhadap pola, bukan terhadap skala absolut.
+- Transformasi log membantu mengurangi perbedaan skala ekstrem antara produk mahal dan murah.
+- Normalisasi memastikan semua rating berada dalam skala yang sama, membantu stabilitas pelatihan model.
 
 ---
 
-### **Encoding untuk User & Produk**
+### 8. **Encoding ID Pelanggan dan Produk**
 
 ```python
 user_ids = cf_data['Customer ID'].unique().tolist()
@@ -825,63 +563,275 @@ product2product_encoded = {x: i for i, x in enumerate(product_ids)}
 
 cf_data['user'] = cf_data['Customer ID'].map(user2user_encoded)
 cf_data['product'] = cf_data['Product ID'].map(product2product_encoded)
-
 num_users = len(user2user_encoded)
 num_products = len(product2product_encoded)
+cf_data = cf_data[['user', 'product', 'rating']]
 ```
 
 **Penjelasan:**
-ID pengguna dan produk diubah menjadi angka agar bisa digunakan sebagai indeks input ke dalam embedding layer pada neural network. Lalu menetapkan nilai jumlah users dan products.
+ID pelanggan dan produk dikonversi ke indeks numerik agar kompatibel dengan model machine learning. Hasil akhir hanya memuat kolom `user`, `product`, dan `rating`.
 
 **Alasan:**
-Model tidak bisa memproses ID string langsung, jadi perlu representasi numerik yang tetap menjaga hubungan antar entitas.
+- Model neural network tidak menerima string sebagai input, hanya angka.
+- Mapping ini memungkinkan pelatihan model menggunakan embedding layer yang efektif.
 
 ---
 
-### **Finalisasi Dataset**
+## **Modeling**
+
+Untuk menyelesaikan permasalahan sistem rekomendasi dalam retail ini, digunakan dua pendekatan utama:
+
+1. **Content-Based Filtering (CBF)**
+2. **Collaborative Filtering (CF)**
+
+Masing-masing pendekatan dilengkapi dengan **dua metode berbeda** untuk meningkatkan ketepatan dan variasi rekomendasi. Output akhir dari kedua pendekatan adalah **Top-N produk** yang direkomendasikan berdasarkan konten atau perilaku pengguna.
+
+---
+
+### **1. Content-Based Filtering (CBF)**
+
+Content-Based Filtering merekomendasikan produk berdasarkan **kemiripan deskriptif antar item**. Pendekatan ini cocok untuk kasus di mana kita ingin memberikan rekomendasi produk yang mirip dengan produk yang sudah dilihat, dibeli, atau disukai oleh pengguna. CBF tidak bergantung pada data interaksi pengguna lain, sehingga dapat mengatasi masalah *cold-start user*.
+
+Pada proyek ini, dibangun dua model collaborative filtering:
+
+* TF-IDF + Nearest Neighbors 
+* TF-IDF + LSA (Latent Semantic Analysis)
+
+Kedua model bertujuan menghasilkan Top-N rekomendasi produk untuk pelanggan tertentu.
+
+---
+
+#### **Pendekatan 1: TF-IDF + Nearest Neighbors (Cosine Similarity)**
+
+Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**.
 
 ```python
-cf_data = cf_data[['user', 'product', 'rating']]
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.neighbors import NearestNeighbors
+```
+
+> **Penjelasan:** TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. Kata-kata yang unik akan mendapat bobot lebih tinggi, sedangkan kata-kata umum (seperti “dan”, “the”, dll.) akan dinormalisasi.
+
+---
+
+##### **Langkah 1: Pemetaan indeks produk**
+
+```python
+# Pemetaan ID Produk ke indeks DataFrame
+product_id_to_index = pd.Series(df_cbf.index, index=df_cbf['Product ID'])
+```
+
+> **Penjelasan:** Digunakan untuk mengakses baris produk berdasarkan `Product ID` secara efisien saat melakukan pencarian rekomendasi.
+
+---
+
+##### **Langkah 2: Membangun model Nearest Neighbors**
+
+```python
+# Inisialisasi model Nearest Neighbors menggunakan cosine similarity
+model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
+model_knn.fit(tfidf_matrix)
+```
+
+> **Penjelasan:** Model Nearest Neighbors digunakan untuk menemukan produk yang paling dekat berdasarkan vektor TF-IDF. Metode `cosine similarity` efektif karena mengukur sudut antar vektor, bukan panjang absolutnya, sangat cocok untuk data teks.
+
+---
+
+##### **Langkah 3: Fungsi rekomendasi**
+
+```python
+def get_recommendations_with_similarity(product_id, top_n=5):
+    if product_id not in product_id_to_index:
+        return f"Product ID {product_id} not found."
+    idx = product_id_to_index[product_id]
+    sim_scores = list(enumerate(cosine_similarity(tfidf_matrix[idx], tfidf_matrix)[0]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    recommendations = []
+    sim_list = []
+    ......
+```
+
+> **Penjelasan:** Fungsi ini menerima `Product ID`, lalu mencari `top_n` produk yang paling mirip berdasarkan konten. Output berupa daftar produk dengan `Product ID`, deskripsi, dan skor kemiripan (`similarity score`).
+
+---
+
+##### **Contoh Penggunaan Rekomendasi**
+
+```python
+example_id = df_cbf['Product ID'].iloc[0]
+print("Original Product Description:\n", df_cbf[df_cbf['Product ID'] == example_id]['Description EN'].values[0])
+
+recs_tfidf = get_recommendations_with_similarity(product_id=example_id, top_n=5)
+print("\nRecommended Products (TF-IDF):")
+print(recs_tfidf)
+```
+
+> **Penjelasan:** Output menampilkan deskripsi produk asli dan rekomendasi Top-N produk beserta skor kemiripannya. Semakin tinggi skor kemiripan (mendekati 1), semakin mirip produk tersebut.
+
+---
+
+#### **Pendekatan 2: TF-IDF + Latent Semantic Analysis (LSA)**
+
+Metode ini merupakan peningkatan dari pendekatan sebelumnya. Selain menggunakan TF-IDF, teknik **Latent Semantic Analysis (LSA)** digunakan untuk mereduksi dimensi vektor dan mengekstrak makna laten antara kata-kata dalam deskripsi produk.
+
+```python
+from sklearn.decomposition import TruncatedSVD
+```
+
+##### **Langkah 1: Reduksi Dimensi dengan LSA**
+
+```python
+lsa = TruncatedSVD(n_components=100)
+lsa_matrix = lsa.fit_transform(tfidf_matrix)
+```
+
+> **Penjelasan:** LSA membantu menangkap hubungan semantik antar kata dalam deskripsi produk, meskipun tidak secara eksplisit muncul bersama. Dengan mereduksi dimensi ke 100 komponen, kita tetap mempertahankan informasi penting namun mengurangi kompleksitas komputasi.
+
+---
+
+##### **Langkah 2: Hitung Cosine Similarity**
+
+```python
+similarity_matrix = cosine_similarity(lsa_matrix)
+product_id_to_index = pd.Series(df_cbf.index, index=df_cbf['Product ID'])
+```
+
+> **Penjelasan:** Setelah reduksi dimensi, cosine similarity dihitung ulang untuk menilai kemiripan antar produk berdasarkan representasi laten mereka.
+
+---
+
+##### **Langkah 3: Fungsi Rekomendasi Berbasis LSA**
+
+```python
+def get_lsa_recommendations(product_id, top_n=5):
+    if product_id not in product_id_to_index:
+        return f"Product ID {product_id} not found."
+    idx = product_id_to_index[product_id]
+    sim_scores = list(enumerate(similarity_matrix[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    recommendations = []
+    sim_list = []
+    for i, score in sim_scores[1:]:
+        if df_cbf.iloc[i]['Product ID'] != product_id:
+            recommendations.append(df_cbf.iloc[i])
+            sim_list.append((df_cbf.iloc[i]['Product ID'], score))
+        if len(recommendations) == top_n:
+            break
+	.......
+```
+
+> **Penjelasan:** Fungsi ini hampir identik dengan fungsi sebelumnya, namun menggunakan matriks LSA sebagai dasar perhitungan kemiripan. Hasilnya sering kali lebih bermakna secara semantik.
+
+---
+
+##### **Contoh Penggunaan Rekomendasi LSA**
+
+```python
+example_id = df_cbf['Product ID'].iloc[0]
+print("Original Product Description:\n", df_cbf[df_cbf['Product ID'] == example_id]['Description EN'].values[0])
+recs_lsa = get_lsa_recommendations(product_id=example_id, top_n=5)
+print("\nRecommended Products (LSA):")
+print(recs_lsa)
+```
+---
+
+
+#### Hasil TOP-N atau hasil Rekomendasi TF-IDF NearestNeighbor
+
+| Product ID | Category  | Sub Category      | Description EN                       | Color   |
+| ---------- | --------- | ----------------- | ------------------------------------ | ------- |
+| 9621       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Buttons | NEUTRAL |
+| 7281       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Glitter | NEUTRAL |
+| 11998      | Masculine | Coats and Blazers | Executive Neutral Suede With Glitter | NEUTRAL |
+| 14988      | Masculine | Coats and Blazers | Neutral Suede Boho With Buttons      | NEUTRAL |
+| 1494       | Masculine | Coats and Blazers | Luxurious Neutral Nylon With Pockets | NEUTRAL |
+
+#### Hasil TOP-N atau hasil Rekomendasi TF-IDF NearestNeighbor
+
+| Product ID | Category  | Sub Category      | Description EN                       | Color   |
+| ---------- | --------- | ----------------- | ------------------------------------ | ------- |
+| 9621       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Buttons | NEUTRAL |
+| 7281       | Feminine  | Coats and Blazers | Luxurious Neutral Suede With Glitter | NEUTRAL |
+| 11998      | Masculine | Coats and Blazers | Executive Neutral Suede With Glitter | NEUTRAL |
+| 14988      | Masculine | Coats and Blazers | Neutral Suede Boho With Buttons      | NEUTRAL |
+| 1494       | Masculine | Coats and Blazers | Luxurious Neutral Nylon With Pockets | NEUTRAL |
+
+Bisa dilihat bahwa kedua pendekatan mendapatkan hasil rekomendasi yang sama persis, mengindikasikan kedua pendekatan memiliki memiliki nilai similarity yang tidak terlalu beda jauh.
+
+---
+
+### **Perbandingan Pendekatan Content-Based Beserta Kelebihan dan Kekurangannya**
+
+| Aspek | TF-IDF + Nearest Neighbors | TF-IDF + LSA |
+|------|-----------------------------|--------------|
+| **Akurasi Rekomendasi** | Tinggi | Lebih tinggi (dapat menangkap makna semantik) |
+| **Kecepatan Komputasi** | Cepat | Sedikit lebih lambat karena proses LSA |
+| **Kemampuan Menangani Sinonim** | Terbatas | Lebih baik |
+| **Kompleksitas Model** | Rendah | Menengah |
+| **Overfitting** | Sangat rendah | Sangat rendah |
+
+---
+
+#### **1. TF-IDF + Nearest Neighbors**
+
+**Kelebihan:**  
+Pendekatan ini merupakan metode yang sederhana namun efektif untuk sistem rekomendasi berbasis konten. Dengan menggunakan **TF-IDF (Term Frequency-Inverse Document Frequency)**, model mampu mengubah deskripsi produk menjadi representasi numerik yang menekankan kata-kata unik dan meminimalkan pengaruh kata-kata umum. Algoritma **Nearest Neighbors** kemudian mencari produk dengan konten paling mirip menggunakan **cosine similarity**, memberikan hasil rekomendasi yang relevan dan mudah diinterpretasikan. Pendekatan ini sangat cepat dalam pelatihan dan eksekusi, sehingga cocok digunakan dalam sistem real-time atau lingkungan produksi dengan batasan sumber daya komputasi.
+
+**Kekurangan:**  
+Meskipun efisien, pendekatan ini memiliki keterbatasan dalam hal **pemahaman semantik**. Karena hanya bergantung pada kemunculan kata secara harfiah, TF-IDF + Nearest Neighbors kurang mampu menangkap makna atau sinonim dari kata-kata dalam deskripsi produk. Misalnya, kata "bahan lembut" dan "material nyaman" bisa saja merujuk pada hal yang sama, tetapi tidak akan dikenali sebagai kemiripan oleh model ini. Selain itu, dimensi vektor TF-IDF bisa menjadi sangat besar, menyebabkan beban memori tinggi jika tidak dikelola dengan baik.
+
+---
+
+#### **2. TF-IDF + Latent Semantic Analysis (LSA)**
+
+**Kelebihan:**  
+Metode ini merupakan pengembangan dari pendekatan sebelumnya dengan penambahan teknik **Latent Semantic Analysis (LSA)**. LSA menggunakan **TruncatedSVD** untuk mereduksi dimensi vektor TF-IDF dan mengekstrak konsep laten antar kata dalam teks. Hal ini memungkinkan model untuk menangkap hubungan semantik antara produk meskipun tidak ada kesamaan kata secara eksplisit. Hasil rekomendasi cenderung lebih bermakna dan mampu menemukan produk serupa berdasarkan tema atau topik tersembunyi dalam deskripsi. Pendekatan ini juga membantu mengurangi noise dan redundansi dalam data teks.
+
+**Kekurangan:**  
+Sebagai harga dari peningkatan akurasi semantik, **TF-IDF + LSA** membutuhkan waktu dan sumber daya komputasi yang lebih besar karena proses reduksi dimensi. Jika jumlah komponen LSA tidak diatur dengan benar, dapat terjadi **underfitting** atau **overfitting**, sehingga perlu dilakukan tuning parameter yang teliti. Selain itu, interpretasi hasil menjadi sedikit lebih kompleks karena model tidak lagi sepenuhnya bergantung pada kata-kata eksplisit melainkan pada konsep laten yang tidak selalu mudah dijelaskan secara intuitif.
+
+---
+
+#### **Kesimpulan Analisa:**
+Jika tujuan utama adalah **sistem rekomendasi real-time yang sederhana dan cepat**, maka **TF-IDF + Nearest Neighbors** menjadi pilihan yang tepat. Namun jika prioritas adalah **rekomendasi yang lebih bermakna secara semantik dan personalisasi yang lebih baik**, maka **TF-IDF + LSA** menjadi solusi yang lebih ideal. Kombinasi kedua pendekatan ini dalam sistem hybrid juga dapat menjadi strategi efektif untuk meningkatkan performa dan ketahanan sistem rekomendasi.
+
+---
+
+### **Collaborative Filtering**
+
+Collaborative Filtering (CF) memanfaatkan **interaksi antar pengguna dan produk** untuk merekomendasikan item berdasarkan kesamaan perilaku. Pendekatan ini sangat efektif dalam mengidentifikasi pola tersembunyi dari data transaksi dan memberikan rekomendasi yang personal. CF cocok digunakan saat ada banyak data interaksi pengguna (misalnya pembelian atau penilaian).
+
+Pada proyek ini, dibangun dua model collaborative filtering:
+1. **RecommenderNet** – model deep learning dengan embedding dan dense layer
+2. **Matrix Factorization** – pendekatan klasik menggunakan dot product vektor laten
+
+Kedua model bertujuan menghasilkan **Top-N rekomendasi produk** untuk pelanggan tertentu.
+
+---
+### **Pendekatan 1: RecommenderNet**
+
+
+##### **Langkah 1: Pemisahan Data Latih dan Validasi**
+
+```python
 X = cf_data[['user', 'product']].values
 y = cf_data['rating'].values
-
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
-**Penjelasan:**
-Dataset akhir disiapkan dalam bentuk input (`X`) dan target (`y`). Pembagian train–validation dilakukan agar model bisa diuji performanya.
-
-**Alasan:**
-Validasi diperlukan untuk mengevaluasi kemampuan generalisasi model terhadap data yang belum pernah dilihat saat training.
+> **Penjelasan:**  
+Data dibagi menjadi 80% untuk pelatihan dan 20% untuk validasi. Ini membantu menilai performa model pada data unseen.
 
 ---
 
-### **Pemeriksaan NaN dan Infinite Values**
+##### **Langkah 2: Pembuatan class deeplearning RecommenderNet**
+
+RecommenderNet adalah model deep learning yang mempelajari interaksi kompleks antara pengguna dan produk menggunakan **embedding layer**, **dense layer**, dan **dropout layer**.
 
 ```python
-print(np.isnan(X_train).sum(), np.isinf(X_train).sum())
-print(np.isnan(y_train).sum(), np.isinf(y_train).sum())
-```
-
-**Penjelasan:**
-Cek apakah ada data kosong (NaN) atau tak terhingga (inf) yang dapat menyebabkan error saat pelatihan.
-
-**Alasan:**
-Nilai-nilai tidak valid bisa membuat training gagal atau hasil model tidak akurat, jadi perlu dipastikan datanya bersih.
-
-
-### **Pendekatan 1: Model Deep Learning – RecommenderNet**
----
-Model ini merupakan perluasan dari pendekatan Matrix Factorization. Selain menggunakan embedding untuk user dan item, RecommenderNet menambahkan lapisan-lapisan Dense dan Dropout, sehingga dapat mempelajari hubungan *non-linear* dan kompleks antar pengguna dan produk.
-
----
-
-**Arsitektur Model: RecommenderNet**
-
-```python
-class RecommenderNet(tf.keras.Model):
+class RecommenderNet(keras.Model):
     def __init__(self, num_users, num_items, embedding_size=50, **kwargs):
-        super(RecommenderNet, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.user_embedding = layers.Embedding(
             input_dim=num_users,
             output_dim=embedding_size,
@@ -894,154 +844,68 @@ class RecommenderNet(tf.keras.Model):
             embeddings_initializer='he_normal',
             embeddings_regularizer=tf.keras.regularizers.l2(1e-6)
         )
-        self.dense_1 = layers.Dense(128, activation='relu')
-        self.dropout_1 = layers.Dropout(0.3)
-        self.dense_2 = layers.Dense(64, activation='relu')
-        self.dropout_2 = layers.Dropout(0.3)
-        self.output_layer = layers.Dense(1)
+        self.dense_1 = layers.Dense(64, activation='relu')
+        self.dropout = layers.Dropout(0.2)
+        self.out = layers.Dense(1, activation='linear')
 
     def call(self, inputs):
         user_vector = self.user_embedding(inputs[:, 0])
         item_vector = self.item_embedding(inputs[:, 1])
-        interaction = tf.multiply(user_vector, item_vector)
-        x = self.dense_1(interaction)
-        x = self.dropout_1(x)
-        x = self.dense_2(x)
-        x = self.dropout_2(x)
-        output = self.output_layer(x)
-        return tf.squeeze(output, axis=1)
+        x = user_vector * item_vector
+        x = self.dense_1(x)
+        x = self.dropout(x)
+        return self.out(x)
 ```
 
+> **Penjelasan:**  
+Model ini memetakan ID pengguna dan produk ke dalam vektor berdimensi rendah. Vektor tersebut dikalikan elemen demi elemen untuk menangkap hubungan interaktif, lalu diproses melalui Dense Layer dan Dropout untuk meningkatkan akurasi prediksi. Output berupa skor rating regresi.
+
 ---
 
-**Penjelasan Teknis:**
->
-* **Embedding Layer:** Sama seperti Matrix Factorization, user dan item ID diubah menjadi vektor berdimensi rendah.
-* **Interaction Layer:** Alih-alih dot product sederhana, RecommenderNet melakukan *element-wise multiplication*, menghasilkan fitur interaksi gabungan dari user dan item.
-* **Dense Layers:** Menambahkan dua lapisan fully connected untuk menangkap interaksi kompleks.
-* **Dropout:** Dropout digunakan setelah setiap Dense layer sebagai regularisasi untuk mencegah overfitting.
-* **Output Layer:** Hasil akhirnya berupa 1 neuron tanpa aktivasi (linear), karena target kita adalah regresi (nilai rating).
->
----
-
-**Kompilasi dan Pelatihan Model**
+##### **Langkah 3: Kompilasi dan Pelatihan Model**
 
 ```python
-model = RecommenderNet(num_users=len(user2user_encoded), num_items=len(product2product_encoded))
+early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2, min_lr=1e-6)
+model = RecommenderNet(num_users, num_products, embedding_size=50)
 model.compile(
-    loss='mean_squared_error',
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    loss='mse',
+    optimizer=keras.optimizers.Adam(learning_rate=0.0005),
     metrics=[tf.keras.metrics.RootMeanSquaredError()]
 )
-
-early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2, min_lr=1e-6)
-
 history = model.fit(
-    x=X_train,
-    y=y_train,
-    epochs=50,
+    X_train, y_train,
+    batch_size=256,
+    epochs=10,
     validation_data=(X_val, y_val),
-    batch_size=64,
     callbacks=[early_stop, reduce_lr]
 )
 ```
+> **Penjelasan:**  
+Model dilatih dengan fungsi kerugian MSE dan metrik RMSE. Callback seperti `EarlyStopping` dan `ReduceLROnPlateau` digunakan untuk mengoptimalkan proses pelatihan dan mencegah overfitting.
+
 
 ---
 
-**Penjelasan Proses Pelatihan:**
+### **Pendekatan 2: Matrix Factorization**
 
-* **Loss Function:** `mean_squared_error` digunakan karena model bertugas meregresi rating (bukan klasifikasi).
-* **Optimizer:** Adam optimizer memberikan konvergensi yang cepat dan stabil.
-* **EarlyStopping:** Menghentikan training lebih awal jika tidak ada peningkatan pada `val_loss` dalam beberapa epoch.
-* **ReduceLROnPlateau:** Secara otomatis menurunkan learning rate jika performa validasi stagnan.
-* **Epoch dan Batch Size:** 50 epoch dengan batch size 64 merupakan pengaturan umum yang bisa disesuaikan berdasarkan dataset.
+Matrix Factorization adalah pendekatan klasik dalam sistem rekomendasi yang menggunakan **dot product antara vektor embedding pengguna dan item** untuk memprediksi rating.
 
----
-
-**Fungsi Rekomendasi untuk User**
+##### **Langkah 1: Pembuatan class Matrix Factorization**
 
 ```python
-def recommend_products_with_customer_info(model, user_id_original, top_k=10):
-    encoded_user_id = user2user_encoded.get(user_id_original)
-    if encoded_user_id is None:
-        return f"User ID {user_id_original} tidak ditemukan."
-
-    user_df = cf_data[cf_data['user'] == encoded_user_id]
-    seen_products = set(user_df['product'].tolist())
-    
-    all_product_ids = np.array(list(product2product_encoded.values()))
-    not_seen_product_ids = np.setdiff1d(all_product_ids, list(seen_products))
-
-    user_input = np.array([[encoded_user_id, pid] for pid in not_seen_product_ids])
-    predicted_ratings = model.predict(user_input).flatten()
-
-    top_indices = predicted_ratings.argsort()[-top_k:][::-1]
-    recommended_product_ids = not_seen_product_ids[top_indices]
-    
-    recommended_original_ids = [product_ids[pid] for pid in recommended_product_ids]
-    customer_info = df[df['Customer ID'] == user_id_original][['Customer ID', 'Customer Name']].drop_duplicates()
-    recommended_products = df[df['Product ID'].isin(recommended_original_ids)][['Product ID', 'Product Name']].drop_duplicates()
-    
-    return customer_info.merge(recommended_products, how='cross')
-```
-
----
-
-**Penjelasan Langkah-langkah:**
-
-* **Encode ID:** ID user asli diubah ke encoded index yang digunakan oleh model.
-* **Filter Produk:** Ambil semua produk yang belum dibeli oleh user.
-* **Prediksi Rating:** Model memprediksi skor kecocokan untuk setiap produk tersebut.
-* **Top-k Seleksi:** Ambil produk dengan skor prediksi tertinggi.
-* **Gabungkan Info Pelanggan dan Produk:** Fungsi ini juga mengembalikan nama pelanggan bersama produk yang direkomendasikan.
-
-
-**Output Rekomendasi: RecommenderNet**
-
-* **Informasi Pelanggan**
-
-    | Customer ID | Name          | Gender | Age |
-    | ----------- | ------------- | ------ | --- |
-    | 47162       | Rachel Herman | F      | 41  |
-
-* **Rekomendasi Produk**
-
-    | Product ID | Category  | Sub Category       | Color\_y | Sizes                  | Description EN                                 |
-    | ---------- | --------- | ------------------ | -------- | ---------------------- | ---------------------------------------------- |
-    | 16600      | Masculine | Coats and Blazers  | BEIGE    | M\|L\|XL\|XXL          | Streetwear Tricot Beige Smooth                 |
-    | 15311      | Children  | Coats              | GREEN    | P\|M\|G                | Green Jacquard Executive With Buttons          |
-    | 16132      | Masculine | Coats and Blazers  | BLACK    | M\|L\|XL\|XXL          | Vintage Black Jacquard With Hood               |
-    | 17764      | Feminine  | Pants and Jeans    | BLACK    | 36\|38\|40\|42\|44\|46 | Women'S Jeans With Dark Wash And Black Details |
-    | 16927      | Feminine  | Coats and Blazers  | MUSTARD  | S\|M\|L                | Luxurious Velvet Mustard Padded                |
-    | 15092      | Masculine | Coats and Blazers  | WHITE    | M\|L\|XL\|XXL          | Formal White Wool With Hood                    |
-    | 16871      | Children  | Coats              | NEUTRAL  | P\|M\|G                | Nylon Neutral Embroidery Sports                |
-    | 15883      | Children  | Coats              | RED      | P\|M\|G                | Classic Red Embroidered Tricot                 |
-    | 2978       | Masculine | T-shirts and Polos | GOLD     | M\|L\|XL\|XXL          | Gold Polyester Streetwear With Hood            |
-    | 15309      | Children  | Baby (0-12 months) | RED      | P\|M\|G                | Modern Red Nylon With Pockets                  |
-
-
-
-
----
-### **Pendekatan 2: MatrixFactorization**
----
-
-Pendekatan ini menggunakan representasi vektor laten dari user dan item. Alih-alih mempelajari hubungan kompleks antar fitur, model ini hanya mengandalkan *dot product* antara embedding user dan produk untuk memprediksi nilai rating. Ini adalah pendekatan klasik dalam sistem rekomendasi yang ringan dan cukup efektif.
-
-```python
-class MatrixFactorization(tf.keras.Model):
-    def __init__(self, num_users, num_items, embedding_size=50, **kwargs):
-        super(MatrixFactorization, self).__init__(**kwargs)
-        self.user_embedding = tf.keras.layers.Embedding(
+class MatrixFactorization(keras.Model):
+    def __init__(self, num_users, num_items, latent_dim=50):
+        super().__init__()
+        self.user_embedding = layers.Embedding(
             input_dim=num_users,
-            output_dim=embedding_size,
+            output_dim=latent_dim,
             embeddings_initializer='he_normal',
             embeddings_regularizer=tf.keras.regularizers.l2(1e-6)
         )
-        self.item_embedding = tf.keras.layers.Embedding(
+        self.item_embedding = layers.Embedding(
             input_dim=num_items,
-            output_dim=embedding_size,
+            output_dim=latent_dim,
             embeddings_initializer='he_normal',
             embeddings_regularizer=tf.keras.regularizers.l2(1e-6)
         )
@@ -1049,285 +913,222 @@ class MatrixFactorization(tf.keras.Model):
     def call(self, inputs):
         user_vector = self.user_embedding(inputs[:, 0])
         item_vector = self.item_embedding(inputs[:, 1])
-        dot_product = tf.reduce_sum(user_vector * item_vector, axis=1)
+        dot_product = tf.reduce_sum(user_vector * item_vector, axis=1, keepdims=True)
         return dot_product
 ```
 
-**Penjelasan Teknis:**
-
-* Model ini hanya memiliki dua embedding layer: satu untuk user dan satu untuk item. Setiap user dan item direpresentasikan dalam ruang dimensi rendah (*latent space*) berukuran `embedding_size`.
-* Proses prediksi dilakukan dengan menghitung *dot product* antara vektor user dan item. Nilai dot product ini merepresentasikan estimasi rating atau skor kecocokan.
-* Tidak ada Dense Layer atau aktivasi non-linear; arsitektur ini sederhana, sehingga sangat cepat saat training dan cocok untuk dataset besar.
-* Regularisasi L2 digunakan untuk mencegah overfitting.
+> **Penjelasan:**  
+Model ini lebih sederhana karena hanya bergantung pada representasi vektor laten pengguna dan produk. Dot product digunakan untuk mengukur kesesuaian antara keduanya.
 
 ---
 
-**Kompilasi dan Pelatihan Model**
+##### **Langkah 2: Kompilasi dan Pelatihan Model**
 
 ```python
-mf_model = MatrixFactorization(num_users=len(user2user_encoded), num_items=len(product2product_encoded))
+mf_model = MatrixFactorization(num_users=num_users, num_items=num_products, latent_dim=50)
 mf_model.compile(
-    loss='mean_squared_error',
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    optimizer=keras.optimizers.Adam(learning_rate=0.001),
+    loss='mse',
     metrics=[tf.keras.metrics.RootMeanSquaredError()]
 )
 
-early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2, min_lr=1e-6)
-
 history_mf = mf_model.fit(
-    x=X_train,
-    y=y_train,
-    epochs=50,
+    X_train, y_train,
+    batch_size=256,
+    epochs=10,
     validation_data=(X_val, y_val),
-    batch_size=64,
     callbacks=[early_stop, reduce_lr]
 )
 ```
 
-**Penjelasan:**
+> **Penjelasan:**  
+Pelatihan dilakukan dengan cara yang sama seperti RecommenderNet, namun tanpa Dense Layer tambahan. Hal ini membuat model lebih ringkas dan cepat dilatih.
 
-* Model dilatih menggunakan *Mean Squared Error (MSE)* sebagai loss function, karena kita melakukan regresi terhadap nilai rating.
-* Optimizer yang digunakan adalah Adam, yang efisien untuk training neural network.
-* Dua callback ditambahkan untuk meningkatkan performa training:
-
-  * `EarlyStopping` akan menghentikan training ketika `val_loss` tidak membaik setelah beberapa epoch, serta mengembalikan bobot model terbaik.
-  * `ReduceLROnPlateau` akan menurunkan *learning rate* jika model stagnan dalam proses validasi.
-* Model dilatih hingga maksimal 50 epoch, namun bisa berhenti lebih awal bila kondisi early stopping terpenuhi.
 ---
 
-**Fungsi Rekomendasi Produk untuk Matrix Factorization**
+#### **Mengambil Rekomendasi dari tiap Pendekatan**
+##### **Fungsi Rekomendasi Personal**
 
 ```python
-def recommend_products_mf(model, user_id_original, top_k=10):
-    encoded_user_id = user2user_encoded.get(user_id_original)
-    if encoded_user_id is None:
-        return f"User ID {user_id_original} tidak ditemukan."
-
-    user_df = cf_data[cf_data['user'] == encoded_user_id]
-    seen_products = set(user_df['product'].tolist())
-    
-    all_product_ids = np.array(list(product2product_encoded.values()))
-    not_seen_product_ids = np.setdiff1d(all_product_ids, list(seen_products))
-
-    user_input = np.array([[encoded_user_id, pid] for pid in not_seen_product_ids])
-    predicted_ratings = model.predict(user_input).flatten()
-    
-    top_indices = predicted_ratings.argsort()[-top_k:][::-1]
-    recommended_product_ids = not_seen_product_ids[top_indices]
-    
-    recommended_original_ids = [product_ids[pid] for pid in recommended_product_ids]
-    return df[df['Product ID'].isin(recommended_original_ids)][['Product ID', 'Product Name']].drop_duplicates()
+def recommend_products_with_customer_info(model, user_id_original, top_k=10):
+    user_id_encoded = user2user_encoded[user_id_original]
+    customer_info = df[df['Customer ID'] == user_id_original][['Customer ID', 'Name', 'Gender','Age']].drop_duplicates().reset_index(drop=True)
+    products_bought = cf_data[cf_data['user'] == user_id_encoded]['product'].values
+    all_product_indices = np.array([i for i in range(num_products) if i not in products_bought])
+    user_array = np.full(len(all_product_indices), user_id_encoded)
+    predictions = model.predict(np.stack([user_array, all_product_indices], axis=1)).flatten()
+    top_indices = predictions.argsort()[-top_k:][::-1]
+    recommended_product_ids = [product_ids[all_product_indices[i]] for i in top_indices]
+    recommended_df = df[df['Product ID'].isin(recommended_product_ids)][['Product ID', 'Category', 'Sub Category', 'Color_y', 'Sizes', 'Description EN']].drop_duplicates().reset_index(drop=True)
+    return customer_info, recommended_df
 ```
 
-**Penjelasan Proses:**
+> **Penjelasan:**  
+Fungsi ini menghasilkan rekomendasi produk berdasarkan preferensi historis pengguna. Produk yang belum dibeli dinilai berdasarkan prediksi rating, dan yang memiliki skor tertinggi direkomendasikan.
 
-* Fungsi menerima `user_id_original` dan memetakannya ke index internal (encoded).
-* Produk yang telah dibeli oleh user dikeluarkan dari kandidat rekomendasi (agar tidak direkomendasikan ulang).
-* Model kemudian memprediksi skor kecocokan (rating) untuk semua produk yang belum pernah dibeli.
-* Skor-skor tersebut diurutkan, dan top-k produk dengan skor tertinggi dikembalikan sebagai hasil rekomendasi.
-* Fungsi mengembalikan informasi produk asli berdasarkan ID, sehingga bisa ditampilkan secara deskriptif kepada user.
+---
 
-**Output Rekomendasi: Matrix Factorization**
+##### **Contoh Penggunaan Rekomendasi dengan RecommenderNet**
 
-* **Informasi Pelanggan**
+```python
+user_id_sample = df['Customer ID'].iloc[0]
+customer_info, recommendation_result_recommender_net = recommend_products_with_customer_info(model, user_id_sample)
+print("Informasi Pelanggan:\n", customer_info.to_string(index=False))
+print("\nRekomendasi Produk (RecommenderNet):\n", recommendation_result_recommender_net.to_string(index=False))
+```
 
-    | Customer ID | Name          | Gender | Age |
-    | ----------- | ------------- | ------ | --- |
-    | 47162       | Rachel Herman | F      | 41  |
+##### **Contoh Penggunaan Rekomendasi dengan Matrix Factorization**
 
-* **Rekomendasi Produk**
+```python
+customer_info, recommendation_result_mf = recommend_products_with_customer_info(mf_model, user_id_sample)
+print("\nRekomendasi Produk (Matrix Factorization):\n", recommendation_result_mf.to_string(index=False))
+```
 
-    | Product ID | Category  | Sub Category       | Color\_y | Sizes                  | Description EN                                 |
-    | ---------- | --------- | ------------------ | -------- | ---------------------- | ---------------------------------------------- |
-    | 16600      | Masculine | Coats and Blazers  | BEIGE    | M\|L\|XL\|XXL          | Streetwear Tricot Beige Smooth                 |
-    | 15311      | Children  | Coats              | GREEN    | P\|M\|G                | Green Jacquard Executive With Buttons          |
-    | 16132      | Masculine | Coats and Blazers  | BLACK    | M\|L\|XL\|XXL          | Vintage Black Jacquard With Hood               |
-    | 17764      | Feminine  | Pants and Jeans    | BLACK    | 36\|38\|40\|42\|44\|46 | Women'S Jeans With Dark Wash And Black Details |
-    | 16927      | Feminine  | Coats and Blazers  | MUSTARD  | S\|M\|L                | Luxurious Velvet Mustard Padded                |
-    | 15092      | Masculine | Coats and Blazers  | WHITE    | M\|L\|XL\|XXL          | Formal White Wool With Hood                    |
-    | 16871      | Children  | Coats              | NEUTRAL  | P\|M\|G                | Nylon Neutral Embroidery Sports                |
-    | 15883      | Children  | Coats              | RED      | P\|M\|G                | Classic Red Embroidered Tricot                 |
-    | 2978       | Masculine | T-shirts and Polos | GOLD     | M\|L\|XL\|XXL          | Gold Polyester Streetwear With Hood            |
-    | 15309      | Children  | Baby (0-12 months) | RED      | P\|M\|G                | Modern Red Nylon With Pockets                  |
+#### Hasil TOP-N atau hasil Rekomendasi RecommenderNet
+
+
+| Product ID | Category  | Sub Category          | Color     | Sizes                  | Description EN                                 |
+| ---------- | --------- | --------------------- | --------- | ---------------------- | ---------------------------------------------- |
+| 794        | Masculine | T-shirts and Polos    | TURQUOISE | M\|L\|XL\|XXL          | Stripped Of Turquoise Wool With Hood           |
+| 16418      | Masculine | Coats and Blazers     | YELLOW    | M\|L\|XL\|XXL          | Executive Printed Yellow Cotton                |
+| 15311      | Children  | Coats                 | GREEN     | P\|M\|G                | Green Jacquard Executive With Buttons          |
+| 16147      | Feminine  | Coats and Blazers     | GREEN     | S\|M\|L                | Luxurious Padded Green Velvet                  |
+| 17239      | Feminine  | Coats and Blazers     | BLUE      | S\|M\|L\|XL            | Casual Padded Blue Lace                        |
+| 15107      | Feminine  | Coats and Blazers     | MUSTARD   | S\|M\|L\|XL            | Luxurious Nylon Mustard With Ruffles           |
+| 16325      | Children  | Coats                 | MUSTARD   | P\|M\|G                | Classic Polyester Smooth Mustard               |
+| 17172      | Masculine | Coats and Blazers     | GREEN     | M\|L\|XL\|XXL          | Casual Green Tricot With Pockets               |
+| 17764      | Feminine  | Pants and Jeans       | BLACK     | 36\|38\|40\|42\|44\|46 | Women's Jeans With Dark Wash And Black Details |
+| 16148      | Feminine  | Sweaters and Knitwear | YELLOW    | S\|M\|L\|XL            | Yellow High-Tech Nylon With Ruffles            |
+
+
+
+#### Hasil TOP-N atau hasil Rekomendasi Matrix Factorization
+
+| Product ID | Category  | Sub Category      | Color     | Sizes         | Description EN                              |
+| ---------- | --------- | ----------------- | --------- | ------------- | ------------------------------------------- |
+| 4551       | Feminine  | Coats and Blazers | TURQUOISE | S\|M\|L\|XL   | Luxurious Padded Turquoise Tricot           |
+| 5659       | Masculine | Suits and Blazers | BLACK     | M\|L\|XL\|XXL | Male Black Velvet Fact For Formal Dinner    |
+| 7344       | Masculine | Coats and Blazers | BLUE      | M\|L\|XL\|XXL | Modern Blue Velvet With Buttons             |
+| 11831      | Feminine  | Coats and Blazers | LILAC     | S\|M\|L\|XL   | Modern Jacquard Lilac Smooth                |
+| 10495      | Masculine | Suits and Blazers | BLACK     | M\|L\|XL\|XXL | Male Black Velvet Fact For Formal Dinner    |
+| 11483      | Masculine | Suits and Blazers | SILVER    | M\|L\|XL\|XXL | Classic Style Male Fact With Silver Buttons |
+| 13064      | Masculine | Coats and Blazers | TURQUOISE | M\|L\|XL      | Punk Jacquard Turquoise With Lace           |
+| 13454      | Masculine | Coats and Blazers | BLUE      | M\|L\|XL\|XXL | Stripped Embroidered Blue Jeans             |
+| 14026      | Masculine | Coats and Blazers | LILAC     | M\|L\|XL\|XXL | Modern Smooth Lilac Wool                    |
+| 12830      | Masculine | Coats and Blazers | NEUTRAL   | M\|L\|XL\|XXL | Modern Neutral Denim With Fringes           |
 
 
 
 ---
 
-Pendekatan ini unggul dari segi efisiensi dan kesederhanaan. Namun, karena hanya mengandalkan *dot product* antar embedding, ia mungkin memiliki keterbatasan dalam menangkap pola kompleks, misalnya interaksi non-linear antar user dan produk. Oleh karena itu, Matrix Factorization cocok untuk baseline model atau sistem rekomendasi cepat dalam skenario skala besar.
+### **Perbandingan Pendekatan Collaborative Filtering beserta Kelebihan dan Kekurangannya**
 
-**Perbandingan Singkat RecommenderNet dengan Matrix Factorization:**
+| Aspek | RecommenderNet | Matrix Factorization |
+|------|----------------|-----------------------|
+| **Akurasi Rekomendasi** | Tinggi (RMSE < 0.12) | Menengah (RMSE < 0.30) |
+| **Kompleksitas Model** | Tinggi (neural network) | Rendah (hanya embedding + dot product) |
+| **Waktu Pelatihan** | Lebih lama | Cepat |
+| **Kemampuan Menangkap Pola Non-Linear** | Sangat baik | Terbatas |
+| **Overfitting** | Rentan jika tidak diatur dengan callback | Stabil, jarang overfit |
+| **Sumber Daya Komputasi** | Tinggi | Rendah |
 
-| Aspek         | RecommenderNet               | Matrix Factorization |
-| ------------- | ---------------------------- | -------------------- |
-| Arsitektur    | Embedding + Dense + Dropout  | Hanya Embedding      |
-| Interaksi     | Element-wise \* + Dense      | Dot Product          |
-| Kapasitas     | Lebih kompleks, bisa overfit | Ringan dan cepat     |
-| Fleksibilitas | Tinggi (bisa disesuaikan)    | Terbatas             |
-| Kemampuan     | Bisa tangkap pola non-linear | Linear saja          |
+---
+Berikut adalah penjelasan **kelebihan dan kekurangan dari dua pendekatan Collaborative Filtering**, yaitu **RecommenderNet** dan **Matrix Factorization**, dalam bentuk paragraf deskriptif:
 
 ---
 
-### **1. RecommenderNet (Neural Network-based CF)**
+### **1. RecommenderNet**
 
-**Kelebihan:**
+**Kelebihan:**  
+RecommenderNet merupakan model deep learning yang mampu menangkap pola interaksi kompleks antara pengguna dan produk dengan sangat baik. Model ini memanfaatkan **embedding layer** untuk memetakan ID pengguna dan produk ke dalam vektor berdimensi rendah, lalu menggabungkan keduanya melalui **dense layer dan dropout layer** untuk memprediksi rating. Hasil pelatihan menunjukkan performa yang sangat baik dengan **RMSE akhir di bawah 0.12** dan **loss kurang dari 0.015**, menjadikannya sebagai model dengan **akurasi tertinggi** di antara semua pendekatan. Selain itu, penggunaan teknik seperti `EarlyStopping` dan `ReduceLROnPlateau` membantu mengoptimalkan proses pelatihan dan menghindari overfitting jika dikelola dengan benar.
 
-* **Akurasi tinggi:** RMSE rendah baik pada training maupun validation.
-* **Mampu menangkap relasi kompleks** antar user dan item (non-linear).
-* **Adaptif:** Bisa dikembangkan dengan fitur tambahan seperti metadata atau embedding lanjutan.
-
-**Kekurangan:**
-
-* **Rentan overfitting** tanpa pengaturan EarlyStopping.
-* **Waktu pelatihan lebih lama** dan butuh sumber daya komputasi lebih besar.
-* **Sulit diinterpretasikan**, karena model bersifat “black box”.
+**Kekurangan:**  
+Meskipun akurat, RecommenderNet cenderung lebih rentan terhadap **overfitting**, terutama jika pelatihan dilanjutkan terlalu jauh tanpa pengawasan. Perbedaan antara metrik training dan validation cukup signifikan, menandakan bahwa model ini perlu dikontrol dengan ketat selama pelatihan agar tidak terlalu spesifik pada data latih. Selain itu, struktur model yang kompleks membutuhkan **sumber daya komputasi yang tinggi**, sehingga waktu pelatihan lebih lama dan memerlukan perangkat keras yang mendukung seperti GPU.
 
 ---
 
-### **2. Matrix Factorization (Dot Product of Embeddings)**
+### **2. Matrix Factorization**
 
-**Kelebihan:**
+**Kelebihan:**  
+Matrix Factorization adalah pendekatan yang lebih sederhana namun **lebih stabil dan generalisasi lebih baik**. Dengan menggunakan dekomposisi matriks untuk merepresentasikan pengguna dan item dalam ruang laten, model ini berhasil mencapai **RMSE di bawah 0.30** dan **loss di bawah 0.10**, menunjukkan performa yang memadai meskipun tidak setinggi RecommenderNet. Salah satu keunggulan utamanya adalah **stabilitas selama pelatihan**, di mana tidak ada indikasi overfitting yang jelas meskipun dilatih hingga 10 epoch. Ini membuatnya cocok digunakan dalam lingkungan produksi atau dataset yang lebih besar dengan batasan sumber daya.
 
-* **Sederhana dan cepat** dalam pelatihan.
-* **Stabil**, cocok sebagai baseline.
-* **Mudah diinterpretasi**, karena hasilnya berasal dari kombinasi linear faktor laten.
+**Kekurangan:**  
+Dibanding RecommenderNet, Matrix Factorization memiliki **akurasi prediksi yang sedikit lebih rendah**, karena representasi interaksi pengguna-item yang lebih sederhana. Meskipun efektif untuk sistem rekomendasi dasar, pendekatan ini kurang mampu menangkap pola interaksi non-linear yang kompleks. Untuk meningkatkan performa, model ini mungkin perlu dilanjutkan pelatihannya dengan strategi penyesuaian *learning rate* atau penambahan regularisasi agar dapat mendekati akurasi RecommenderNet.
 
-**Kekurangan:**
+---
 
-* **Akurasi lebih rendah**, terutama pada dataset besar atau kompleks.
-* **Terbatas dalam menangkap relasi non-linear** antara user dan item.
-* **Kurang fleksibel** jika ingin menambahkan fitur kontekstual.
+### **Kesimpulan Analisa:**
+Jika tujuan utama adalah **akurasi maksimal dan personalisasi tinggi**, maka **RecommenderNet** menjadi pilihan utama asalkan dilengkapi dengan mekanisme pencegahan overfitting. Namun jika prioritas utama adalah **kestabilan, generalisasi, dan efisiensi komputasi**, maka **Matrix Factorization** menjadi solusi yang lebih tepat. Kombinasi kedua pendekatan ini dalam sistem hybrid juga dapat menjadi strategi efektif untuk meningkatkan performa dan ketahanan sistem rekomendasi.
+
 ---
 
 ## **Evaluasi**
 
-**METRIK EVALUASI**
----
-
-**1. Cosine Similarity (Untuk Content-Based Filtering)**
-
-**Formula:**
-
-$$
-
-\text{Cosine Similarity} = \frac{\vec{A} \cdot \vec{B}}{\|\vec{A}\| \times \|\vec{B}\|}
-$$
-
-**Keterangan:**
-
-* $\vec{A}, \vec{B}$ adalah vektor representasi produk (misalnya, hasil dari TF-IDF atau LSA).
-* Nilai berada pada rentang **\[-1, 1]**, namun dalam konteks TF-IDF umumnya berada di **\[0, 1]**.
-* Nilai yang mendekati 1 menunjukkan bahwa dua produk sangat mirip secara teks (fitur/konten).
-
-**Tujuan:**
-Mengukur tingkat kemiripan antara produk referensi dan produk lain berdasarkan representasi kontennya (deskripsi).
+Evaluasi ini merangkum dan membandingkan empat pendekatan sistem rekomendasi yang telah diimplementasikan, dengan fokus pada data dan hasil pelatihan terbaru.
 
 ---
 
-**2. Root Mean Square Error (RMSE) (Untuk Collaborative Filtering)**
+### **1. Content-Based Filtering (CBF): TF-IDF vs. TF-IDF + LSA**
 
-**Formula:**
+Kedua model Content-Based Filtering dievaluasi berdasarkan kemampuannya merekomendasikan produk serupa berdasarkan atribut tekstual.
 
-$$
-\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
-$$
+* **Observasi Utama:**
+    * **Konsistensi Hasil:** Kedua metode, baik TF-IDF + Nearest Neighbors maupun TF-IDF + LSA, menghasilkan daftar rekomendasi yang **identik dan relevan** untuk produk referensi. Hal ini menunjukkan bahwa fitur konten pada dataset ini sangat kuat dan jelas.
+    * **Kualitas Rekomendasi:** Skor *cosine similarity* rata-rata untuk rekomendasi teratas mencapai **~0.8**, yang mengindikasikan tingkat relevansi yang sangat tinggi.
+    * **Keunggulan LSA:** Meskipun hasilnya serupa, LSA secara teoritis lebih unggul karena mampu menangkap makna semantik (konsep laten) dalam deskripsi, menjadikannya lebih robust terhadap variasi bahasa dan lebih cocok untuk dataset yang lebih kompleks.
 
-**Keterangan:**
-
-* $y_i$: nilai rating sebenarnya dari user terhadap produk ke-$i$
-* $\hat{y}_i$: rating yang diprediksi oleh model
-* $n$: jumlah total observasi
-
-**Tujuan:**
-Menilai seberapa jauh prediksi model dari nilai aktual. Semakin kecil RMSE, semakin akurat model.
+* **Kesimpulan CBF:**
+    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya.
 
 ---
 
-**3. Training Loss dan Validation Loss**
-**Formula (Mean Squared Error - MSE):**
+### **2. Collaborative Filtering (CF): RecommenderNet vs. Matrix Factorization**
 
-$$
-\text{Loss} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-$$
+Pendekatan Collaborative Filtering dievaluasi berdasarkan metrik *loss* dan RMSE pada data training dan validasi untuk mengukur akurasi prediksi dan stabilitas model.
 
-* MSE digunakan sebagai *loss function* untuk menghitung error selama proses training dan validasi.
-* Perbedaannya dengan RMSE hanyalah pada akar kuadrat di akhir.
+#### **Tabel Perbandingan Kinerja Terbaik Model**
 
-**Tujuan:**
+| Metrik Evaluasi | RecommenderNet (Puncak di Epoch 9) | Matrix Factorization (di Epoch 10) |
+| :--- | :--- | :--- |
+| **Validation Loss (Terendah)** | **~0.0128** | 0.0929 |
+| **Validation RMSE (Terendah)** | **~0.1103** | 0.2467 |
+| **Stabilitas & Overfitting**| Akurasi sangat tinggi, namun rentan *overfitting* setelah epoch ke-6. | Sangat stabil, tidak ada tanda *overfitting* signifikan. |
+| **Kecepatan Konvergensi** | Sangat Cepat | Lebih Lambat dan Bertahap |
 
-* **Training Loss**: mengukur kesalahan model pada data pelatihan.
-* **Validation Loss**: mengukur kesalahan model pada data yang tidak dilatih.
-* Digunakan untuk mendeteksi **overfitting** atau **underfitting**.
 
----
+#### **Analisis Kinerja Model**
 
-### **1. Content-Based Filtering (CBF)**
+* **RecommenderNet:**
+    * **Keunggulan:** Menunjukkan performa akurasi yang **jauh lebih superior** dengan *Validation RMSE* mencapai **0.1103**. Model ini sangat cepat belajar dan mampu menangkap pola interaksi pengguna-item yang kompleks.
+    * **Kelemahan:** Cenderung mengalami *overfitting* setelah mencapai performa puncaknya (sekitar epoch 5-6). Oleh karena itu, penerapan *callback* seperti **`EarlyStopping`** menjadi krusial untuk menyimpan model pada titik terbaiknya. Oleh karena itu dari sinilah kita menetapkan bahwa epoch ke 5 atau 6 adalah yang terbaik 
 
-Dua varian CBF dibandingkan: **TF-IDF + Cosine Similarity (Nearest Neighbor)** dan **TF-IDF + LSA**.
+    | Epoch | Steps | Time | Loss   | RMSE (Train) | Val Loss | RMSE (Val) | Learning Rate |
+    | ----- | ----- | ---- | ------ | ------------ | -------- | ---------- | ------------- |
+    | 5     | 3906  | 33s  | 0.0043 | 0.0581       | 0.0132   | 0.1105     | 5.0000e-04    |
+    | 6     | 3906  | 33s  | 0.0041 | 0.0565       | 0.0133   | 0.1114     | 5.0000e-04    |
 
-> ![CBF TF-IDF](images/image-21.png)
-> ![CBF TF-IDF + LSA](images/image-22.png)
 
-**1.1. Observasi Hasil Rekomendasi untuk Produk Referensi (Product 64):**
-
-* **Skor Similaritas:** Kedua metode menghasilkan skor tinggi pada 5 produk teratas (rata-rata >0.8 atau mendekati 1.0) Mengindikasikan bahwa hasil rekomendasi memang sudah tepat dan sudah sangat baik untuk mencari produk rekomendasi yang sesuai.
-* **Daftar Rekomendasi:** Kedua metode memberikan hasil **identik** dengan urutan dan isi yang sama: **\[12876, 7342, 11543, 14267, 1632]**.
-* **Profil Produk Target:** Produk 64 dideskripsikan sebagai **blazer pria berbahan suede**, bergaya maskulin, warna netral, berdasarkan kata kunci: `['suede', 'elegant', 'neutral', 'hooded', 'coat', 'xl', 'masculine', 'zipper', 'blazers', 'outerwear']`.
-
-**1.2. Tabel Perbandingan TF-IDF vs TF-IDF + LSA:**
-
-| Aspek Evaluasi               | TF-IDF (Cosine Similarity)              | TF-IDF + LSA                             |
-| :--------------------------- | :-------------------------------------- | :--------------------------------------- |
-| **Produk Direkomendasikan**  | \[12876, 7342, 11543, 14267, 1632]      | Sama persis                              |
-| **Urutan dan Skor**          | Sama, rata-rata skor >0.8               | Sama, perbedaan skor < 0.01              |
-| **Relevansi Produk**         | Sangat tinggi, atribut produk konsisten | Identik, tidak ada peningkatan           |
-| **Kompleksitas Algoritma**   | Sederhana                               | Lebih kompleks (dengan dekomposisi SVD)  |
-| **Kecepatan Proses**         | Cepat                                   | Lebih lambat                             |
-| **Interpretasi**             | Mudah, berdasarkan kata kunci eksplisit | Lebih abstrak, tergantung ruang semantik |
-| **Kemampuan Hadapi Sinonim** | Terbatas                                | Lebih baik (fitur utama LSA)             |
-
-**1.3. Ringkasan Evaluasi CBF:**
-
-Kedua metode memberikan **rekomendasi identik dan sangat relevan**. Ini menunjukkan bahwa **TF-IDF sederhana sudah sangat efektif** dalam konteks data deskriptif produk ini. Penggunaan LSA tidak menambah nilai prediktif secara signifikan, namun dapat berguna di domain dengan ambiguitas atau sinonim tinggi.
+* **Matrix Factorization:**
+    * **Keunggulan:** Menawarkan **stabilitas pelatihan yang sangat baik**. Kurva *loss* dan RMSE menurun secara konsisten tanpa indikasi *overfitting*, menjadikannya model yang andal dan mudah di-generalisasi.
+    * **Kelemahan:** Tingkat akurasinya lebih rendah (*Validation RMSE* 0.2467) dibandingkan RecommenderNet. Model ini memerlukan lebih banyak waktu atau *tuning* lebih lanjut untuk mencapai tingkat akurasi yang kompetitif.
 
 ---
 
-### **2. Collaborative Filtering (CF)**
+### **3. Kesimpulan dan Rekomendasi Model Terbaik**
 
-Perbandingan dua model: **RecommenderNet (deep learning)** dan **MatrixFactorization (dot product embeddings)**.
+Berdasarkan analisis komparatif dari keempat model:
 
-> ![RecommenderNet](images/image-26.png)
-> ![MatrixFactorization](images/image-25.png)
+| Aspek | Pilihan Utama | Alternatif/Baseline |
+| :--- | :--- | :--- |
+| **Akurasi Prediksi Tertinggi** | **RecommenderNet** | Matrix Factorization |
+| **Stabilitas & Generalisasi** | **Matrix Factorization** | TF-IDF + LSA |
+| **Rekomendasi Berbasis Konten** | **TF-IDF + LSA** | TF-IDF + Nearest Neighbors |
+| **Sistem Hibrida (Ideal)** | Kombinasi **RecommenderNet** (untuk personalisasi) dan **TF-IDF + LSA** (untuk *cold-start* & atribut produk). |
 
-**2.1. Hasil Akhir Model (Berdasarkan Data Terbaru):**
+#### **Rekomendasi Akhir:**
 
-| Aspek                              | **RecommenderNet**                              | **Matrix Factorization**                         |
-| :--------------------------------- | :---------------------------------------------- | :----------------------------------------------- |
-| **Training Loss (awal → akhir)**   | 0.0302 → 0.0012 (Epoch 10)                      | 0.1755 → 0.0582 (Epoch 10)                       |
-| **Training RMSE Akhir**            | **0.0256** *(sangat baik)*                      | 0.1658                                           |
-| **Validation Loss (awal → akhir)** | 0.0185 → 0.0132 → **0.0128**                    | 0.1254 → 0.0931                                  |
-| **Validation RMSE Akhir**          | **0.1089** *(terbaik di antara semua)*          | 0.2474 *(jauh lebih tinggi)*                     |
-| **Overfitting**                    | Ada indikasi ringan setelah epoch ke-6          | Tidak terdeteksi, kurva sangat stabil            |
-| **Learning Rate**                  | Bertahap: 5e-4 → 2.5e-4 → 1.25e-4               | Tetap: 0.0010                                    |
-| **Strategi Pengendalian**          | Perlu `EarlyStopping`, `ModelCheckpoint`        | Bisa lanjut, tuning dimensi laten                |
-| **Rekomendasi**                    | **Model terbaik** jika overfitting dikendalikan | Cocok sebagai baseline stabil tapi kurang akurat |
+1.  Untuk **akurasi personalisasi maksimal**, **RecommenderNet** adalah pilihan terbaik, dengan syarat wajib mengimplementasikan **`EarlyStopping`** pada epoch 5-6 untuk mencegah *overfitting* dan mengunci performa optimalnya.
+2.  Untuk **stabilitas, kemudahan implementasi, atau sebagai *baseline* yang kuat**, **Matrix Factorization** adalah pilihan yang sangat solid.
+3.  Untuk menangani **pengguna baru (*cold-start*) atau merekomendasikan item serupa**, **TF-IDF + LSA** adalah pendekatan yang paling andal karena kemampuannya memahami konten produk secara semantik.
 
-**2.2. Ringkasan Evaluasi CF:**
-
-1. **RecommenderNet unggul dalam akurasi:**
-   Dengan RMSE validasi **0.1089**, model ini jauh lebih baik dibanding Matrix Factorization (**0.2474**), menunjukkan kekuatan representasi dalam mempelajari hubungan user-item kompleks.
-
-2. **Perlu kontrol overfitting:**
-   Karena mulai menunjukkan kenaikan val\_loss setelah epoch 6, disarankan menggunakan strategi seperti `EarlyStopping` untuk menghentikan pelatihan pada titik optimal.
-
-3. **Matrix Factorization cocok untuk baseline:**
-   Meskipun tidak seakurat RecommenderNet, ia menawarkan kestabilan dan interpretabilitas yang baik sebagai titik awal eksperimen.
----
-### **Kesimpulan Umum Evaluasi Model**
-
-Berdasarkan analisis kedua pendekatan:
-
-* Dalam **Content-Based Filtering** untuk Produk 64, pendekatan TF-IDF sederhana (Nearest Neighbor) sudah memberikan hasil yang sangat relevan dan identik dengan pendekatan TF-IDF + LSA yang lebih kompleks, menunjukkan efektivitasnya untuk kasus spesifik ini.
-* Dalam **Collaborative Filtering**, **RecommenderNet menunjukkan potensi akurasi yang jauh lebih superior** dibandingkan MatrixFactorization. Meskipun memerlukan manajemen *overfitting* yang cermat melalui `EarlyStopping`, hasil Validation RMSE yang signifikan lebih rendah menjadikannya kandidat model utama untuk personalisasi berbasis interaksi pengguna.
-* Kombinasi atau sistem hibrida yang memanfaatkan kekuatan kedua jenis pendekatan (CBF untuk *cold-start* dan atribut produk, CF untuk pola interaksi pengguna) seringkali menjadi solusi paling robust dalam sistem rekomendasi produksi.
+Secara keseluruhan, **RecommenderNet** menonjol sebagai model dengan potensi tertinggi untuk memberikan rekomendasi yang paling akurat dan personal bagi pengguna. Namun, untuk sistem produksi yang robust, **pendekatan hibrida** yang menggabungkan kekuatan **RecommenderNet** dan **TF-IDF + LSA** akan menjadi solusi yang paling komprehensif.
