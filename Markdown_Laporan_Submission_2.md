@@ -1107,6 +1107,7 @@ $$
 * $y_i$: label sebenarnya (0 atau 1).
 * $\hat{y}_i$: prediksi model (probabilitas antara 0 dan 1).
 * Cocok untuk RecommenderNet karena model ini memprediksi peluang interaksi.
+> Note Jika rumus tidak ditampilkan, coba preview di Visual Studio Code
 
 #### **2. Root Mean Squared Error (RMSE)**
 
