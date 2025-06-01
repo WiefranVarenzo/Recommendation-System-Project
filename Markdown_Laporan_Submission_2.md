@@ -263,7 +263,7 @@ Dataset mencakup 4540404 data baris transaksi (Berdasarkan Invoice), lalu total 
 
 4. **Pemeriksaan Nilai Kosong dan Duplikat**
 
-   > ![alt text](image-27.png)
+   > ![alt text](images/image-27.png)
 
    Ditemukan 12445 data null pada kolom Color dan 2070 data null pada kolom sizes di dataset product.
 
