@@ -185,11 +185,12 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
     Jumlah unik pelanggan dihitung dengan:
 
     > Jumlah data pelanggan: 1,643,306
-   >![alt text](images/image-1.png)
+
+   > ![alt text](images/image-1.png)
 
    Dapat disimpulkan bahwa kolom memiliki tipe data yang sesuai, meskipun perlu penyesuaian pada `Date Of Birth` agar bertipe datetime. Lalu bisa kita lihat terdapat perbedaan atau ketidak-samaan untuk jumlah data Job Title dibandingkan kolom lainnya.
 
-3. **Pemeriksaan Nilai Kosong dan Duplikat**
+4. **Pemeriksaan Nilai Kosong dan Duplikat**
 
    > ![alt text](images/image-2.png)
 
@@ -203,7 +204,7 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 
    > `np.int64(0)`
 
-4. **Pemrosesan Kolom Tanggal dan Usia Pelanggan**
+5. **Pemrosesan Kolom Tanggal dan Usia Pelanggan**
     
     ```python
     # Memastikan kolom Date Of Birth menjadi date
@@ -219,7 +220,7 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 
    Mayoritas pelanggan berada pada rentang usia produktif antara 20–40 tahun.
 
-5. **Distribusi Gender Pelanggan**
+6. **Distribusi Gender Pelanggan**
 
    > ![alt text](images/image-3.png)
 
@@ -433,12 +434,12 @@ Pada tahap ini, dilakukan serangkaian teknik pembersihan dan pemrosesan data unt
 
 ### 1. **Menghapus Nilai Kosong (Null) dan Data Duplikat**
 
-    ```python
-    customers = customers.dropna(axis=0, how='any').drop_duplicates()
-    products = products.dropna(axis=0, how='any').drop_duplicates()
-    stores = stores.dropna(axis=0, how='any').drop_duplicates()
-    transactions = transactions.dropna(axis=0, how='any').drop_duplicates()
-    ```
+```python
+customers = customers.dropna(axis=0, how='any').drop_duplicates()
+products = products.dropna(axis=0, how='any').drop_duplicates()
+stores = stores.dropna(axis=0, how='any').drop_duplicates()
+transactions = transactions.dropna(axis=0, how='any').drop_duplicates()
+```
 
 **Penjelasan:**
 Setiap dataset (`customers`, `products`, `stores`, `transactions`) dibersihkan dengan menghapus baris yang memiliki nilai kosong (`dropna`) dan kemudian dihapus data duplikatnya (`drop_duplicates`).
@@ -1194,7 +1195,7 @@ Kemudian, untuk hasil Metrik evaluasi lainnya (Precission@K dan Recall@K):
     * **Keunggulan LSA:** Meskipun hasilnya serupa, LSA secara teoritis lebih unggul karena mampu menangkap makna semantik (konsep laten) dalam deskripsi, menjadikannya lebih robust terhadap variasi bahasa dan lebih cocok untuk dataset yang lebih kompleks.
 
 * **Kesimpulan CBF:**
-    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya. Hal ini juga di validasi dengan nilai Precission@K dan Recall@K yang bedanya tidak jauh antara kedua pendekatan tersebut. 
+    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya. Hal ini juga di validasi dengan nilai Precission@K dan Recall@K yang bedanya tidak jauh antara kedua pendekatan tersebut.  Kalau ingin sedikit lebih tinggi coverage (recall), maka TF-IDF lebih unggul sedikit. Namun, jika ingin hasil similarity yang lebih konsisten dan bisa digunakan untuk analisis lanjutan (misal clustering atau visualisasi), LSA bisa lebih cocok 
 
 ---
 
