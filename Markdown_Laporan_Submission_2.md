@@ -1068,6 +1068,65 @@ Evaluasi ini merangkum dan membandingkan empat pendekatan sistem rekomendasi yan
 
 ---
 
+
+### **Formula Evaluasi & Penjelasan**
+
+#### **1. Cosine Similarity (untuk Content-Based Filtering)**
+
+> Digunakan untuk mengukur kemiripan antar item berdasarkan representasi vektor teks (TF-IDF / LSA).
+
+**Formula:**
+
+$$
+\text{cosine\_similarity}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}
+$$
+
+**Penjelasan:**
+
+* $A$ dan $B$ adalah vektor representasi dari dua produk/item.
+* $A \cdot B$ adalah hasil dot product antar vektor.
+* $\|A\|$ dan $\|B\|$ adalah norma (magnitudo) dari masing-masing vektor.
+* Nilai berkisar dari -1 hingga 1, tapi dalam konteks TF-IDF/LSA, biasanya antara **0 (tidak mirip)** hingga **1 (sangat mirip)**.
+
+---
+
+#### **2. Loss Function (untuk Collaborative Filtering)**
+
+##### **a. Binary Cross-Entropy (RecommenderNet)**
+
+> Umumnya digunakan ketika prediksi interaksi (misalnya rating biner: suka/tidak suka).
+
+**Formula:**
+
+$$
+\mathcal{L}_{\text{BCE}} = -\frac{1}{N} \sum_{i=1}^{N} [y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i)]
+$$
+
+**Penjelasan:**
+
+* $y_i$: label sebenarnya (0 atau 1).
+* $\hat{y}_i$: prediksi model (probabilitas antara 0 dan 1).
+* Cocok untuk RecommenderNet karena model ini memprediksi peluang interaksi.
+
+#### **2. Root Mean Squared Error (RMSE)**
+
+> Digunakan untuk menilai akurasi prediksi numerik pada Collaborative Filtering (RecommenderNet & Matrix Factorization).
+
+**Formula:**
+
+$$
+\text{RMSE} = \sqrt{ \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 }
+$$
+
+**Penjelasan:**
+
+* RMSE adalah akar dari MSE.
+* Semakin kecil RMSE, semakin akurat prediksi model.
+* RMSE mempertimbangkan satuan yang sama dengan rating (misal skala 1–5).
+
+---
+
+
 ### **1. Content-Based Filtering (CBF): TF-IDF vs. TF-IDF + LSA**
 
 > ![alt text](images/image-30.png)
