@@ -1187,7 +1187,7 @@ Kemudian, untuk hasil Metrik evaluasi lainnya (Precission@K dan Recall@K):
 * **Precision\@5 sebesar 0.72 (72%)** menunjukkan bahwa dari setiap 5 produk yang direkomendasikan, rata-rata sekitar 3.6 produk benar-benar relevan (misalnya berada di subkategori yang sama dengan produk target). Ini menandakan bahwa rekomendasi yang diberikan cukup **akurasi** dan **tepat sasaran**. Dengan kata lain, pengguna mendapatkan rekomendasi yang memang sesuai dengan preferensi atau kebutuhan mereka.
 
 * **Recall\@5 sebesar 0.0058 (0.58%)** menunjukkan bahwa dari seluruh produk yang relevan (seluruh produk dalam subkategori yang sama), hanya sekitar 0.58% yang berhasil muncul dalam rekomendasi. Hal ini mengindikasikan bahwa sistem merekomendasikan hanya sebagian kecil dari semua produk relevan yang tersedia. Dengan kata lain, **kemampuan cakupan rekomendasi masih rendah**, sehingga ada banyak produk relevan yang tidak terjangkau oleh sistem.
-* 
+  
 * **Observasi Utama:**
     * **Konsistensi Hasil:** Kedua metode, baik TF-IDF + Nearest Neighbors maupun TF-IDF + LSA, menghasilkan daftar rekomendasi yang **identik dan relevan** untuk produk referensi. Hal ini menunjukkan bahwa fitur konten pada dataset ini sangat kuat dan jelas.
     * **Kualitas Rekomendasi:** Skor *cosine similarity* rata-rata untuk rekomendasi teratas mencapai **~0.8**, yang mengindikasikan tingkat relevansi yang sangat tinggi. Lalu dengan Precission 72% untuk kedua pendekatan, artinya rata-rata sekitar 3.6 produk benar-benar relevan diberikan, hal ini cukup baik mengingat hanya 5 rekomendasi saja yang berikan.
