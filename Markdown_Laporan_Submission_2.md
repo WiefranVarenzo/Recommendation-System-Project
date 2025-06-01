@@ -1071,7 +1071,9 @@ Evaluasi ini merangkum dan membandingkan empat pendekatan sistem rekomendasi yan
 
 ### **Formula Evaluasi & Penjelasan**
 
-#### **1. Cosine Similarity (untuk Content-Based Filtering)**
+---
+
+#### 1. Cosine Similarity (untuk Content-Based Filtering)
 
 > Digunakan untuk mengukur kemiripan antar item berdasarkan representasi vektor teks (TF-IDF / LSA).
 
@@ -1083,35 +1085,72 @@ $$
 
 **Penjelasan:**
 
-* $A$ dan $B$ adalah vektor representasi dari dua produk/item.
-* $A \cdot B$ adalah hasil dot product antar vektor.
-* $\|A\|$ dan $\|B\|$ adalah norma (magnitudo) dari masing-masing vektor.
-* Nilai berkisar dari -1 hingga 1, tapi dalam konteks TF-IDF/LSA, biasanya antara **0 (tidak mirip)** hingga **1 (sangat mirip)**.
+- \( A \) dan \( B \) adalah vektor representasi dari dua produk/item.
+- \( A \cdot B \) adalah hasil dot product antar vektor.
+- \( \|A\| \) dan \( \|B\| \) adalah norma (magnitudo) dari masing-masing vektor.
+- Nilai berkisar dari -1 hingga 1, tapi dalam konteks TF-IDF/LSA biasanya antara **0 (tidak mirip)** hingga **1 (sangat mirip)**.
 
 ---
 
-#### **2. Loss Function (untuk Collaborative Filtering)**
+#### 2. Rumus Precision dan Recall
 
-##### **a. Binary Cross-Entropy (RecommenderNet)**
+##### Precision@K
 
-> Umumnya digunakan ketika prediksi interaksi (misalnya rating biner: suka/tidak suka).
+$$
+\text{Precision@K} = \frac{|\text{Recommended Items}@K \cap \text{Relevant Items}|}{K}
+$$
+
+- **Penjelasan:**  
+  Precision@K mengukur proporsi item yang direkomendasikan dalam top-K yang benar-benar relevan.  
+  Artinya, dari K rekomendasi yang diberikan, berapa banyak yang sesuai dengan kebutuhan atau preferensi pengguna.
+
+---
+
+##### Recall@K
+
+$$
+\text{Recall@K} = \frac{|\text{Recommended Items}@K \cap \text{Relevant Items}|}{|\text{Relevant Items}|}
+$$
+
+- **Penjelasan:**  
+  Recall@K mengukur seberapa baik model dapat menangkap semua item relevan yang tersedia.  
+  Artinya, dari seluruh item yang sebenarnya relevan, berapa banyak yang berhasil direkomendasikan dalam top-K.
+
+---
+
+##### Notasi:
+
+- \( \text{Recommended Items}@K \): himpunan item yang direkomendasikan dalam top-K.
+- \( \text{Relevant Items} \): himpunan item yang benar-benar relevan (misal: produk dalam subkategori yang sama).
+- \( | \cdot | \): ukuran atau jumlah elemen dalam himpunan tersebut.
+
+---
+
+#### 3. Loss Function (untuk Collaborative Filtering)
+
+##### a. Binary Cross-Entropy (RecommenderNet)
+
+> Umumnya digunakan untuk prediksi interaksi biner (misal: suka/tidak suka).
 
 **Formula:**
 
 $$
-\mathcal{L}_{\text{BCE}} = -\frac{1}{N} \sum_{i=1}^{N} [y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i)]
+\mathcal{L}_{\text{BCE}} = -\frac{1}{N} \sum_{i=1}^{N} \left[y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i)\right]
 $$
 
 **Penjelasan:**
 
-* $y_i$: label sebenarnya (0 atau 1).
-* $\hat{y}_i$: prediksi model (probabilitas antara 0 dan 1).
-* Cocok untuk RecommenderNet karena model ini memprediksi peluang interaksi.
-> Note Jika rumus tidak ditampilkan, coba preview di Visual Studio Code
+- \( y_i \): label sebenarnya (0 atau 1).
+- \( \hat{y}_i \): prediksi model (probabilitas antara 0 dan 1).
+- Cocok digunakan pada model seperti RecommenderNet yang memprediksi peluang interaksi.
+  
+> *Note:* Jika rumus tidak muncul dengan baik di GitHub, coba lihat preview di editor Markdown seperti Visual Studio Code.
 
-#### **2. Root Mean Squared Error (RMSE)**
+---
 
-> Digunakan untuk menilai akurasi prediksi numerik pada Collaborative Filtering (RecommenderNet & Matrix Factorization).
+#### 4. Root Mean Squared Error (RMSE)
+
+> Digunakan untuk menilai akurasi prediksi numerik pada Collaborative Filtering (misal: RecommenderNet & Matrix Factorization).
 
 **Formula:**
 
@@ -1121,9 +1160,9 @@ $$
 
 **Penjelasan:**
 
-* RMSE adalah akar dari MSE.
-* Semakin kecil RMSE, semakin akurat prediksi model.
-* RMSE mempertimbangkan satuan yang sama dengan rating (misal skala 1–5).
+- RMSE adalah akar dari Mean Squared Error (MSE).
+- Semakin kecil nilai RMSE, semakin akurat prediksi model.
+- RMSE mempertahankan satuan yang sama dengan rating asli (misal skala 1–5).
 
 ---
 
@@ -1133,15 +1172,29 @@ $$
 > ![alt text](images/image-30.png)
 > ![alt text](images/image-31.png)
 
-Kedua model Content-Based Filtering dievaluasi berdasarkan kemampuannya merekomendasikan produk serupa berdasarkan atribut tekstual.
+Kemudian, untuk hasil Metrik evaluasi lainnya (Precission@K dan Recall@K):
+>
+**TF-IDF + NearestNeighbors**
+* Average Precission@K: 0.7200
+* Average Recall@K : 0.0058
+  
+**TF-IDF + NearestNeighbors**
+* Average Precision@5: 0.7200
+* Average Recall@5: 0.0057
+>
+### Kesimpulan Evaluasi Sistem Rekomendasi
 
+* **Precision\@5 sebesar 0.72 (72%)** menunjukkan bahwa dari setiap 5 produk yang direkomendasikan, rata-rata sekitar 3.6 produk benar-benar relevan (misalnya berada di subkategori yang sama dengan produk target). Ini menandakan bahwa rekomendasi yang diberikan cukup **akurasi** dan **tepat sasaran**. Dengan kata lain, pengguna mendapatkan rekomendasi yang memang sesuai dengan preferensi atau kebutuhan mereka.
+
+* **Recall\@5 sebesar 0.0058 (0.58%)** menunjukkan bahwa dari seluruh produk yang relevan (seluruh produk dalam subkategori yang sama), hanya sekitar 0.58% yang berhasil muncul dalam rekomendasi. Hal ini mengindikasikan bahwa sistem merekomendasikan hanya sebagian kecil dari semua produk relevan yang tersedia. Dengan kata lain, **kemampuan cakupan rekomendasi masih rendah**, sehingga ada banyak produk relevan yang tidak terjangkau oleh sistem.
+* 
 * **Observasi Utama:**
     * **Konsistensi Hasil:** Kedua metode, baik TF-IDF + Nearest Neighbors maupun TF-IDF + LSA, menghasilkan daftar rekomendasi yang **identik dan relevan** untuk produk referensi. Hal ini menunjukkan bahwa fitur konten pada dataset ini sangat kuat dan jelas.
-    * **Kualitas Rekomendasi:** Skor *cosine similarity* rata-rata untuk rekomendasi teratas mencapai **~0.8**, yang mengindikasikan tingkat relevansi yang sangat tinggi.
+    * **Kualitas Rekomendasi:** Skor *cosine similarity* rata-rata untuk rekomendasi teratas mencapai **~0.8**, yang mengindikasikan tingkat relevansi yang sangat tinggi. Lalu dengan Precission 72% untuk kedua pendekatan, artinya rata-rata sekitar 3.6 produk benar-benar relevan diberikan, hal ini cukup baik mengingat hanya 5 rekomendasi saja yang berikan.
     * **Keunggulan LSA:** Meskipun hasilnya serupa, LSA secara teoritis lebih unggul karena mampu menangkap makna semantik (konsep laten) dalam deskripsi, menjadikannya lebih robust terhadap variasi bahasa dan lebih cocok untuk dataset yang lebih kompleks.
 
 * **Kesimpulan CBF:**
-    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya.
+    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya. Hal ini juga di validasi dengan nilai Precission@K dan Recall@K yang bedanya tidak jauh antara kedua pendekatan tersebut. 
 
 ---
 
@@ -1194,7 +1247,7 @@ Berdasarkan analisis komparatif dari keempat model:
 | **Rekomendasi Berbasis Konten** | **TF-IDF + LSA** | TF-IDF + Nearest Neighbors |
 | **Sistem Hibrida (Ideal)** | Kombinasi **RecommenderNet** (untuk personalisasi) dan **TF-IDF + LSA** (untuk *cold-start* & atribut produk). |
 
-#### **Rekomendasi Akhir:**
+#### **Kesimpulan dan Rekomendasi Akhir:**
 
 1.  Untuk **akurasi personalisasi maksimal**, **RecommenderNet** adalah pilihan terbaik, dengan syarat wajib mengimplementasikan **`EarlyStopping`** pada epoch 5-6 untuk mencegah *overfitting* dan mengunci performa optimalnya.
 2.  Untuk **stabilitas, kemudahan implementasi, atau sebagai *baseline* yang kuat**, **Matrix Factorization** adalah pilihan yang sangat solid.
