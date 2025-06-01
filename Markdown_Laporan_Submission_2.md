@@ -284,7 +284,7 @@ Dataset mencakup 4540404 data baris transaksi (Berdasarkan Invoice), lalu total 
 
    > ![alt text](images/image-8.png)
 
-   Sub-kategori sangat bervariasi, menunjukkan diversifikasi produk yang tinggi. Sub Kategori produk yang paling banyak ditemukan adalah Accesories, lalu diikut oleh Pants and jeans, Sportwear, dan coats and Blazers, untuk sub categori lainnya jumlah sama di sekitar 700 produk.
+   Sub-kategori sangat bervariasi, menunjukkan diversifikasi produk yang tinggi. Sub Kategori produk yang paling banyak ditemukan adalah Accesories, lalu diikut oleh Pants and jeans, Sportwear, dan coats and Blazers, untuk sub categori lainnya yaitu lebih dari tujuh ratus produk.
 
 ---
 
