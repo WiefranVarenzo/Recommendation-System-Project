@@ -1070,6 +1070,9 @@ Evaluasi ini merangkum dan membandingkan empat pendekatan sistem rekomendasi yan
 
 ### **1. Content-Based Filtering (CBF): TF-IDF vs. TF-IDF + LSA**
 
+> ![alt text](images/image-30.png)
+> ![alt text](images/image-31.png)
+
 Kedua model Content-Based Filtering dievaluasi berdasarkan kemampuannya merekomendasikan produk serupa berdasarkan atribut tekstual.
 
 * **Observasi Utama:**
@@ -1083,6 +1086,12 @@ Kedua model Content-Based Filtering dievaluasi berdasarkan kemampuannya merekome
 ---
 
 ### **2. Collaborative Filtering (CF): RecommenderNet vs. Matrix Factorization**
+
+**RecommenderNet**
+> ![alt text](images/image-32.png)
+
+**Matrix Factorization**
+> ![alt text](images/image-33.png)
 
 Pendekatan Collaborative Filtering dievaluasi berdasarkan metrik *loss* dan RMSE pada data training dan validasi untuk mengukur akurasi prediksi dan stabilitas model.
 
