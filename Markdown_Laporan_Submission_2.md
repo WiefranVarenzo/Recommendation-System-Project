@@ -419,7 +419,7 @@ Dataset mencakup informasi lengkap tentang produk, toko, dan transaksi retail fa
 
 Data toko terdiri dari 35 toko unik yang tersebar merata di berbagai negara besar, masing-masing negara memiliki 5 toko.
 
-Dataset transaksi berisi lebih dari 4,5 juta data, dengan mayoritas berupa pembelian dan metode pembayaran terbanyak adalah kartu kredit. Tren penjualan menunjukkan lonjakan signifikan di akhir tahun. Produk dengan unit price tinggi cenderung menghasilkan line total dan invoice total lebih besar. Produk terlaris berasal dari sub-kategori Sportswear dan Coats & Blazers, sedangkan Suits and Blazers memberikan pendapatan besar meski tidak paling laku.
+Dataset transaksi berisi lebih dari 6 juta data, dengan 4540404 invoice unik. Dimana data mayoritas berupa pembelian dan metode pembayaran terbanyak adalah kartu kredit. Tren penjualan menunjukkan lonjakan signifikan di akhir tahun. Produk dengan unit price tinggi cenderung menghasilkan line total dan invoice total lebih besar. Produk terlaris berasal dari sub-kategori Sportswear dan Coats & Blazers, sedangkan Suits and Blazers memberikan pendapatan besar meski tidak paling laku.
 
 Namun masih ada beberapa hal yang harus diperhatikan, seperti:
 * Masih ditemukan data null yang perlu dibersihkan
