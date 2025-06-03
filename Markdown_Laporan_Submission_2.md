@@ -581,7 +581,7 @@ Kode ini mengubah kolom Customer ID dan Product ID dari format aslinya (biasanya
 - Konversi ke indeks numerik memungkinkan penggunaan embedding layer untuk merepresentasikan user dan produk dalam bentuk vektor.
 - Mapping ini memungkinkan pelatihan model menggunakan embedding layer yang efektif.
 
-##### 9. Pemisahan Data Latih dan Validasi**
+### 9. Pemisahan Data Latih dan Validasi**
 
 ```python
 X = cf_data[['user', 'product']].values
