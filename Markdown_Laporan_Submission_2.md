@@ -513,7 +513,7 @@ tfidf_matrix = tfidf.fit_transform(df_cbf['combined_features'])
 ```
 
 **Penjelasan:**
-Fitur teks dari produk digabungkan menjadi satu kolom (`combined_features`) lalu diubah menjadi representasi numerik menggunakan **TF-IDF (Term Frequency-Inverse Document Frequency)**. Untuk kode df_cbf['combined_features'], bertujuan untuk menggabungkan beberapa fitur teks dari setiap baris (produk) menjadi satu kolom teks utuh bernama combined_features. 
+Fitur teks dari produk digabungkan menjadi satu kolom (`combined_features`) lalu diubah menjadi representasi numerik menggunakan **TF-IDF (Term Frequency-Inverse Document Frequency)**. Untuk kode df_cbf['combined_features'], bertujuan untuk menggabungkan beberapa fitur teks dari setiap baris (produk) menjadi satu kolom teks utuh bernama combined_features. TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. Kata-kata yang unik akan mendapat bobot lebih tinggi, sedangkan kata-kata umum (seperti “dan”, “the”, dll.) akan dinormalisasi
 
 **Alasan:**
 - Penggabungkan penting dalam pendekatan Content-Based Filtering (CBF) berbasis teks, karena kita perlu satu representasi teks yang menggambarkan karakteristik produk secara keseluruhan.
