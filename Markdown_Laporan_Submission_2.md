@@ -581,6 +581,22 @@ Kode ini mengubah kolom Customer ID dan Product ID dari format aslinya (biasanya
 - Konversi ke indeks numerik memungkinkan penggunaan embedding layer untuk merepresentasikan user dan produk dalam bentuk vektor.
 - Mapping ini memungkinkan pelatihan model menggunakan embedding layer yang efektif.
 
+##### 9. Pemisahan Data Latih dan Validasi**
+
+```python
+X = cf_data[['user', 'product']].values
+y = cf_data['rating'].values
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+**Penjelasan:**  
+Data dibagi menjadi 80% untuk pelatihan dan 20% untuk validasi menggunakan train_test_split. Hal ini bertujuan untuk mengevaluasi kinerja model pada data yang tidak dilihat selama pelatihan (unseen data), sehingga dapat menghindari overfitting dan memberikan estimasi performa yang lebih realistis.
+
+**Alasan :** 
+* Validasi performa model: Data validasi digunakan untuk mengukur sejauh mana model mampu melakukan generalisasi ke data baru.
+* Menghindari overfitting: Tanpa data validasi, model bisa saja terlalu menyesuaikan diri dengan data latih dan gagal bekerja dengan baik pada data nyata.
+
+
 ---
 
 ## **Modeling**
@@ -815,21 +831,7 @@ Kedua model bertujuan menghasilkan **Top-N rekomendasi produk** untuk pelanggan 
 ---
 ### **Pendekatan 1: RecommenderNet**
 
-
-##### **Langkah 1: Pemisahan Data Latih dan Validasi**
-
-```python
-X = cf_data[['user', 'product']].values
-y = cf_data['rating'].values
-X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
-```
-
-> **Penjelasan:**  
-Data dibagi menjadi 80% untuk pelatihan dan 20% untuk validasi. Ini membantu menilai performa model pada data unseen.
-
----
-
-##### **Langkah 2: Pembuatan class deeplearning RecommenderNet**
+##### **Langkah 1: Pembuatan class deeplearning RecommenderNet**
 
 RecommenderNet adalah model deep learning yang mempelajari interaksi kompleks antara pengguna dan produk menggunakan **embedding layer**, **dense layer**, dan **dropout layer**.
 
@@ -867,7 +869,7 @@ Model ini memetakan ID pengguna dan produk ke dalam vektor berdimensi rendah. Ve
 
 ---
 
-##### **Langkah 3: Kompilasi dan Pelatihan Model**
+##### **Langkah 2: Kompilasi dan Pelatihan Model**
 
 ```python
 early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
