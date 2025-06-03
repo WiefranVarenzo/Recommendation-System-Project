@@ -86,7 +86,7 @@ Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
 ### **Kondisi dan Kuantitas Data**
 
-Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup 4540404 data baris transaksi (Berdasarkan Invoice), kemudian terdapat  17940 data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak cukup bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` dan `Color` di dataset transactions yang memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format `datetime`, numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
+Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup 4540404 data baris transaksi (Berdasarkan Invoice), kemudian terdapat  17940 data produk, 35 data toko, hingga 1,64 juta data pelanggan dari berbagai negara yang disimpan pada dataset yang berbeda-beda. Seluruh data tampak cukup bersih dan cukup terstruktur, dengan tipe data yang relevan dan lengkap untuk keperluan eksplorasi serta pemodelan sistem rekomendasi. Namun, beberapa kolom seperti `Size` dan `Color` di dataset transactions yang memiliki nilai kosong yang perlu diproses di tahap data preparation. Data transaksi memiliki format numerik (`float`, `int`), dan kategorikal, yang dapat dimanfaatkan dalam berbagai teknik eksplorasi dan rekomendasi. Informasi yang tersedia tetap dapat dimanfaatkan untuk membangun sistem rekomendasi berbasis konten dan simulasi interaksi pelanggan.
 
 
 ---
@@ -98,45 +98,44 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 | ---------------- | --------------------------------------------------- | --------------- |
 | Invoice ID       | ID unik untuk transaksi                             | `string`        |
 | Line             | Nomor urut item dalam invoice                       | `int`           |
-| Customer ID      | ID unik pelanggan                                   | `string`        |
-| Product ID       | ID unik produk                                      | `string`        |
-| Size             | Ukuran produk (S, M, L, XL, atau kosong)            | `string / null` |
+| Customer ID      | ID unik pelanggan                                   | `int`        |
+| Product ID       | ID unik produk                                      | `int`        |
+| Size             | Ukuran produk (S, M, L, XL, atau kosong)            | `string` /null` |
 | Color            | Warna produk (versi transaksi)                      | `string`        |
 | Unit Price       | Harga satuan produk sebelum diskon                  | `float`         |
 | Quantity         | Jumlah unit dibeli                                  | `int`           |
-| Date             | Tanggal dan waktu transaksi                         | `datetime`      |
+| Date             | Tanggal dan waktu transaksi                         | `string`      |
 | Discount         | Diskon (misalnya 0.2 berarti 20%)                   | `float`         |
 | Line Total       | Total harga line item setelah diskon                | `float`         |
-| Store ID         | ID toko tempat transaksi                            | `string`        |
-| Employee ID      | ID karyawan yang memproses transaksi                | `string`        |
+| Store ID         | ID toko tempat transaksi                            | `int`        |
+| Employee ID      | ID karyawan yang memproses transaksi                | `int`        |
 | Currency         | Kode mata uang (3 huruf)                            | `string`        |
 | Currency Symbol  | Simbol mata uang                                    | `string`        |
 | SKU              | Gabungan Product ID, Size, dan Color                | `string`        |
-| Transaction Type | Jenis transaksi (Sale, Return)                      | `category`      |
-| Payment Method   | Metode pembayaran                                   | `category`      |
-| Invoice Total    | Total invoice (sama untuk setiap baris per invoice) | `float`         |
+| Transaction Type | Jenis transaksi (Sale, Return)                      | `string`      |
+| Payment Method   | Metode pembayaran                                   | `string`      |
+| Invoice Total    | Total invoice (sama untuk setiap baris per invoice) | `float64`         |
 
 
 #### **2. Pelanggan (Customer Dataset)**
 
 | Kolom         | Deskripsi               | Tipe Data  |
 | ------------- | ----------------------- | ---------- |
-| Customer ID   | ID unik pelanggan       | `string`   |
+| Customer ID   | ID unik pelanggan       | `int`      |
 | Name          | Nama pelanggan          | `string`   |
 | Email         | Email pelanggan         | `string`   |
 | Telephone     | Nomor telepon pelanggan | `string`   |
 | City          | Kota pelanggan          | `string`   |
 | Country       | Negara pelanggan        | `string`   |
-| Gender        | Jenis kelamin (F, M, D) | `category` |
-| Date Of Birth | Tanggal lahir pelanggan | `date`     |
+| Gender        | Jenis kelamin (F, M, D) | `string`   |
+| Date Of Birth | Tanggal lahir pelanggan | `string`   |
 | Job Title     | Pekerjaan pelanggan     | `string`   |
-| Age           | Umur pelanggan          | `int`      |
 
 #### **3. Produk (Product Dataset)**
 
 | Kolom           | Deskripsi                   | Tipe Data      |
 | --------------- | --------------------------- | -------------- |
-| Product ID      | ID unik produk              | `string`       |
+| Product ID      | ID unik produk              | `int`       |
 | Category        | Kategori produk utama       | `string`       |
 | Sub Category    | Subkategori produk          | `string`       |
 | Description PT  | Deskripsi produk (Portugis) | `string`       |
@@ -146,14 +145,14 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 | Description EN  | Deskripsi produk (Inggris)  | `string`       |
 | Description ZH  | Deskripsi produk (Mandarin) | `string`       |
 | Color           | Warna produk (versi produk) | `string`       |
-| Sizes           | Ukuran produk yang tersedia | `list<string>` |
+| Sizes           | Ukuran produk yang tersedia | `string`       |
 | Production Cost | Biaya produksi dalam USD    | `float`        |
 
 #### **4. Toko (Store Dataset)**
 
 | Kolom               | Deskripsi                        | Tipe Data |
 | ------------------- | -------------------------------- | --------- |
-| Store ID            | ID toko                          | `string`  |
+| Store ID            | ID toko                          | `int`  |
 | Store Name          | Nama toko                        | `string`  |
 | Number of Employees | Jumlah karyawan di toko          | `int`     |
 | ZIP Code            | Kode pos toko                    | `string`  |
@@ -161,7 +160,6 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 | Country             | Negara toko                      | `string`  |
 | Latitude            | Koordinat lintang toko           | `float`   |
 | Longitude           | Koordinat bujur toko             | `float`   |
-| Country\_English    | Nama negara dalam bahasa Inggris | `string`  |
 
 ---
 
@@ -175,7 +173,7 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 
    >![alt text](images/image.png)
 
-   Dari hasil preview, terlihat bahwa data pelanggan memiliki informasi seperti `Customer ID`, `Gender`, 
+   Dari hasil preview, terlihat bahwa data pelanggan memiliki informasi seperti `Customer ID`, `Gender`, dan berbagai data pelanggan lainnya
 
 2. **Informasi Kolom dan Tipe Data**
 
@@ -191,7 +189,7 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 
    Dapat disimpulkan bahwa kolom memiliki tipe data yang sesuai, meskipun perlu penyesuaian pada `Date Of Birth` agar bertipe datetime. Lalu bisa kita lihat terdapat perbedaan atau ketidak-samaan untuk jumlah data Job Title dibandingkan kolom lainnya.
 
-4. **Pemeriksaan Nilai Kosong dan Duplikat**
+3. **Pemeriksaan Nilai Kosong dan Duplikat**
 
    > ![alt text](images/image-2.png)
 
@@ -205,6 +203,12 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
 
    > `np.int64(0)`
 
+4. **Distribusi Gender Pelanggan**
+
+   > ![alt text](images/image-3.png)
+
+   Tampak distribusi pelanggan berdasarkan gender cukup timpang, dimana Male adalah gender customer yang paling banyak ditemui.
+   
 5. **Pemrosesan Kolom Tanggal dan Usia Pelanggan**
     
     ```python
@@ -220,12 +224,7 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
    > ![alt text](images/image-4.png)
 
    Mayoritas pelanggan berada pada rentang usia produktif antara 20–40 tahun.
-
-6. **Distribusi Gender Pelanggan**
-
-   > ![alt text](images/image-3.png)
-
-   Tampak distribusi pelanggan berdasarkan gender cukup timpang, dimana Male adalah gender customer yang paling banyak ditemui.
+   
 ---
 
 #### **Product Dataset**
@@ -357,15 +356,16 @@ Dataset memiliki total 6,416,827 baris data di dataset transaksi, yaitu mencakup
    >![alt text](images/image-13.png)
 
    ```python
-   print('Jumlah data transaksi: ', len(transactions['Invoice ID'].unique()))
+   print('Jumlah data transaksi berdasarkan Invoice: ', len(transactions['Invoice ID'].unique()))
    ```
-   > Jumlah data transaksi:  4540404
+   > Jumlah data transaksi transaksi berdasarkan Invoice:  4540404
 
-   Untuk setiap tipe data tidak ada yang aneh, serta bisa kita lihat bahwa di dataset ini berhubungan (foreign key) terhadap ID di dataset lainnya, hal ini bisa kita gunakan untuk melakukan merge data.
+   Untuk setiap tipe data tidak ada yang aneh, serta bisa kita lihat bahwa di dataset ini berhubungan (foreign key) terhadap ID di dataset lainnya, hal ini bisa kita gunakan untuk melakukan merge data. Namun, seluruh data transaksi yang ditemukan adalah 6416826 data. Berbeda kalau berdasarkan jumlah unik Invoice ID.
 
 2. **Pemeriksaan Nilai Kosong dan Duplikat**
 
    > ![alt text](images/image-29.png)
+   
    Ditemukan 413102 data null di kolom size, dan 4350783 di kolom Color dataset transactions.
 
     ```python
@@ -631,8 +631,8 @@ product_id_to_index = pd.Series(df_cbf.index, index=df_cbf['Product ID'])
 
 ```python
 # Inisialisasi model Nearest Neighbors menggunakan cosine similarity
-model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
-model_knn.fit(tfidf_matrix)
+model = NearestNeighbors(n_neighbors=25, metric='cosine', algorithm='brute')
+model.fit(tfidf_matrix)
 ```
 
 > **Penjelasan:** Model Nearest Neighbors digunakan untuk menemukan produk yang paling dekat berdasarkan vektor TF-IDF. Metode `cosine similarity` efektif karena mengukur sudut antar vektor, bukan panjang absolutnya, sangat cocok untuk data teks.
@@ -642,7 +642,7 @@ model_knn.fit(tfidf_matrix)
 ##### **Langkah 3: Fungsi rekomendasi**
 
 ```python
-def get_recommendations_with_similarity(product_id, top_n=5):
+def get_recommendations_with_similarity(product_id, top_n=5, show_plot=True):
     if product_id not in product_id_to_index:
         return f"Product ID {product_id} not found."
     idx = product_id_to_index[product_id]
@@ -705,7 +705,7 @@ product_id_to_index = pd.Series(df_cbf.index, index=df_cbf['Product ID'])
 ##### **Langkah 3: Fungsi Rekomendasi Berbasis LSA**
 
 ```python
-def get_lsa_recommendations(product_id, top_n=5):
+def get_lsa_recommendations(product_id, top_n=5, show_plot=True):
     if product_id not in product_id_to_index:
         return f"Product ID {product_id} not found."
     idx = product_id_to_index[product_id]
@@ -762,11 +762,11 @@ Bisa dilihat bahwa kedua pendekatan mendapatkan hasil rekomendasi yang sama pers
 
 ---
 
-### **Perbandingan Pendekatan Content-Based Beserta Kelebihan dan Kekurangannya**
+### **Perbandingan Pendekatan Content-Based Beserta Kelebihan dan Kekurangannya Berdasarkan sifat komputasi**
 
 | Aspek | TF-IDF + Nearest Neighbors | TF-IDF + LSA |
 |------|-----------------------------|--------------|
-| **Akurasi Rekomendasi** | Tinggi | Lebih tinggi (dapat menangkap makna semantik) |
+| **Akurasi Rekomendasi** | Lebih Tinggi(Recall@K) | tinggi (dapat menangkap makna semantik) |
 | **Kecepatan Komputasi** | Cepat | Sedikit lebih lambat karena proses LSA |
 | **Kemampuan Menangani Sinonim** | Terbatas | Lebih baik |
 | **Kompleksitas Model** | Rendah | Menengah |
