@@ -625,7 +625,7 @@ Kedua model bertujuan menghasilkan Top-N rekomendasi produk untuk pelanggan tert
 
 #### **Pendekatan 1: Nearest Neighbors (Cosine Similarity)**
 
-Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**. Berikut adalah pustaka yang perlu diimport.
+Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**. 
 
 ##### **Langkah 1: Pemetaan indeks produk**
 
