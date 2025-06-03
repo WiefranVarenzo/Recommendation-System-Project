@@ -1136,23 +1136,20 @@ $$
 
 #### 3. Loss Function (untuk Collaborative Filtering)
 
-##### a. Binary Cross-Entropy (RecommenderNet)
-
 > Umumnya digunakan untuk prediksi interaksi biner (misal: suka/tidak suka).
 
 **Formula:**
 
 $$
-\mathcal{L}_{\text{BCE}} = -\frac{1}{N} \sum_{i=1}^{N} \left[y_i \cdot \log(\hat{y}_i) + (1 - y_i) \cdot \log(1 - \hat{y}_i)\right]
+\mathcal{L}_{\text{MSE}} = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2
 $$
 
 **Penjelasan:**
 
-- \( y_i \): label sebenarnya (0 atau 1).
-- \( \hat{y}_i \): prediksi model (probabilitas antara 0 dan 1).
-- Cocok digunakan pada model seperti RecommenderNet yang memprediksi peluang interaksi.
-  
-> *Note:* Jika rumus tidak muncul dengan baik di GitHub, coba lihat preview di editor Markdown seperti Visual Studio Code.
+* $y_i$ = nilai sebenarnya (true rating).
+* $\hat{y}_i$ = nilai prediksi dari model.
+* $N$ = jumlah total sampel.
+* Loss ini menghitung rata-rata dari kuadrat selisih antara prediksi dan label, memberikan penalti besar untuk prediksi yang jauh meleset.
 
 ---
 
