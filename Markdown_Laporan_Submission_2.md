@@ -1136,8 +1136,6 @@ $$
 
 #### 3. Loss Function (untuk Collaborative Filtering)
 
-> Umumnya digunakan untuk prediksi interaksi biner (misal: suka/tidak suka).
-
 **Formula:**
 
 $$
