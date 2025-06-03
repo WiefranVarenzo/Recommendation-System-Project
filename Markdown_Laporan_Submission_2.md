@@ -889,7 +889,7 @@ history = model.fit(
 )
 ```
 > **Penjelasan:**  
-Model dilatih dengan fungsi kerugian MSE dan metrik RMSE. Callback seperti `EarlyStopping` dan `ReduceLROnPlateau` digunakan untuk mengoptimalkan proses pelatihan dan mencegah overfitting.
+Ini adalah proses pelatihan model rekomendasi berbasis neural network dengan pengaturan yang dirancang untuk menjaga performa dan efisiensi pelatihan. Model dikompilasi dengan fungsi loss Mean Squared Error (MSE) untuk meminimalkan selisih antara rating yang diprediksi dan rating sebenarnya, menggunakan optimizer Adam dengan learning rate sebesar 0.0005 untuk pembaruan bobot yang stabil dan efisien. Proses pelatihan menggunakan batch_size 256 dan dijalankan selama maksimal 10 epochs, namun bisa berhenti lebih awal berkat callback EarlyStopping yang memantau nilai val_loss dan menghentikan pelatihan jika tidak ada perbaikan selama 3 epoch. Callback ReduceLROnPlateau juga digunakan untuk menurunkan learning rate sebanyak setengahnya jika val_loss tidak membaik dalam 2 epoch, hingga batas minimum 1e-6, membantu model agar tetap belajar meskipun mengalami stagnasi. Seluruh proses juga mencatat metrik Root Mean Squared Error (RMSE) untuk mengevaluasi performa model secara lebih interpretable.
 
 
 ---
