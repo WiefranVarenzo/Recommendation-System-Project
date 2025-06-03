@@ -766,7 +766,6 @@ Bisa dilihat bahwa kedua pendekatan mendapatkan hasil rekomendasi yang sama pers
 
 | Aspek | TF-IDF + Nearest Neighbors | TF-IDF + LSA |
 |------|-----------------------------|--------------|
-| **Akurasi Rekomendasi** | Lebih Tinggi(Recall@K) | tinggi (dapat menangkap makna semantik) |
 | **Kecepatan Komputasi** | Cepat | Sedikit lebih lambat karena proses LSA |
 | **Kemampuan Menangani Sinonim** | Terbatas | Lebih baik |
 | **Kompleksitas Model** | Rendah | Menengah |
@@ -1023,7 +1022,7 @@ print("\nRekomendasi Produk (Matrix Factorization):\n", recommendation_result_mf
 
 ---
 
-### **Perbandingan Pendekatan Collaborative Filtering beserta Kelebihan dan Kekurangannya**
+### **Perbandingan Pendekatan Collaborative Filtering beserta Kelebihan dan Kekurangannya Berdasarkan Sifat Komputasi**
 
 | Aspek | RecommenderNet | Matrix Factorization |
 |------|----------------|-----------------------|
@@ -1091,6 +1090,7 @@ $$
 - \( A \cdot B \) adalah hasil dot product antar vektor.
 - \( \|A\| \) dan \( \|B\| \) adalah norma (magnitudo) dari masing-masing vektor.
 - Nilai berkisar dari -1 hingga 1, tapi dalam konteks TF-IDF/LSA biasanya antara **0 (tidak mirip)** hingga **1 (sangat mirip)**.
+- Tidak bisa menjadi satu-satunya metrik evaluasi untuk content-Based.
 
 ---
 
@@ -1196,7 +1196,8 @@ Kemudian, untuk hasil Metrik evaluasi lainnya (Precission@K dan Recall@K):
     * **Keunggulan LSA:** Meskipun hasilnya serupa, LSA secara teoritis lebih unggul karena mampu menangkap makna semantik (konsep laten) dalam deskripsi, menjadikannya lebih robust terhadap variasi bahasa dan lebih cocok untuk dataset yang lebih kompleks.
 
 * **Kesimpulan CBF:**
-    Pendekatan Content-Based sangat efektif dan stabil untuk dataset ini. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik mendalam, sementara **TF-IDF + Nearest Neighbors** adalah alternatif yang lebih sederhana dan cepat dengan hasil yang hampir sama baiknya. Hal ini juga di validasi dengan nilai Precission@K dan Recall@K yang bedanya tidak jauh antara kedua pendekatan tersebut.  Kalau ingin sedikit lebih tinggi coverage (recall), maka TF-IDF lebih unggul sedikit. Namun, jika ingin hasil similarity yang lebih konsisten dan bisa digunakan untuk analisis lanjutan (misal clustering atau visualisasi), LSA bisa lebih cocok 
+    Pendekatan **Content-Based** terbukti sangat efektif dan stabil untuk dataset ini. Dua kombinasi utama yang diuji adalah **TF-IDF + LSA** dan **TF-IDF + Nearest Neighbors**, masing-masing memiliki keunggulan tersendiri. **TF-IDF + LSA** direkomendasikan untuk sistem yang membutuhkan pemahaman semantik yang lebih dalam. Pendekatan ini menghasilkan representasi dokumen yang lebih konsisten dan cocok digunakan dalam analisis lanjutan seperti **clustering** atau **visualisasi**. Di sisi lain, **TF-IDF + Nearest Neighbors** menawarkan solusi yang lebih sederhana dan cepat, namun tetap memberikan hasil rekomendasi yang hampir setara secara akurasi. Evaluasi menggunakan **Precision\@K** dan **Recall\@K** menunjukkan bahwa perbedaan performa antara keduanya relatif kecil. Jika prioritas utama adalah cakupan yang lebih luas (recall), maka pendekatan TF-IDF sedikit lebih unggul. Namun, jika konsistensi hasil dan makna semantik menjadi prioritas, LSA merupakan pilihan yang lebih baik karena kemampuannya mengeneralisasi dan menangkap hubungan konsep yang lebih dalam. Secara keseluruhan, kedua pendekatan memberikan hasil rekomendasi yang mirip, dengan LSA memiliki keunggulan tambahan dalam hal pemahaman semantik dan generalisasi model.
+
 
 ---
 
