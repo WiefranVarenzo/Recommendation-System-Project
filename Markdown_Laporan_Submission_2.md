@@ -616,25 +616,16 @@ Content-Based Filtering merekomendasikan produk berdasarkan **kemiripan deskript
 
 Pada proyek ini, dibangun dua model collaborative filtering:
 
-* TF-IDF + Nearest Neighbors 
-* TF-IDF + LSA (Latent Semantic Analysis)
+* Nearest Neighbors 
+* LSA (Latent Semantic Analysis)
 
 Kedua model bertujuan menghasilkan Top-N rekomendasi produk untuk pelanggan tertentu.
 
 ---
 
-#### **Pendekatan 1: TF-IDF + Nearest Neighbors (Cosine Similarity)**
+#### **Pendekatan 1: Nearest Neighbors (Cosine Similarity)**
 
 Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**. Berikut adalah pustaka yang perlu diimport.
-
-```python
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.neighbors import NearestNeighbors
-```
-
-> **Penjelasan:** TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. Kata-kata yang unik akan mendapat bobot lebih tinggi, sedangkan kata-kata umum (seperti “dan”, “the”, dll.) akan dinormalisasi. Oleh karena itu melakukan extraksi text dengan TF-IDF memerlukan pustaka TfidfVectorizer, dan juga pustaka NearestNeighbors untuk mengambil prosese cosine similarity NearestNeighbors
-
----
 
 ##### **Langkah 1: Pemetaan indeks produk**
 
