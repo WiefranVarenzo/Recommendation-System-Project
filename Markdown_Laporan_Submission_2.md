@@ -77,6 +77,8 @@ Pendekatan ini menggunakan pola perilaku pengguna (interaksi, preferensi, atau p
 
 Dataset yang digunakan dalam proyek ini berjudul **"Global Fashion Retail Sales"**, yang diambil dari [Kaggle Repository](https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset?select=transactions.csv). Dataset ini terdiri dari data penjualan global dari sebuah perusahaan fashion retail dan mencakup berbagai aspek penting seperti transaksi, pelanggan, produk, dan toko.
 
+Link tautan Alternatif: https://www.kaggle.com/datasets/ricgomes/global-fashion-retail-stores-dataset?select=transactions.csv
+
 Secara keseluruhan, dataset ini terbagi menjadi **empat subset utama**, yaitu:
 
 1. **Sales Transaction Dataset** (data transaksi)
@@ -572,10 +574,11 @@ cf_data = cf_data[['user', 'product', 'rating']]
 ```
 
 **Penjelasan:**
-ID pelanggan dan produk dikonversi ke indeks numerik agar kompatibel dengan model machine learning. Hasil akhir hanya memuat kolom `user`, `product`, dan `rating`.
+Kode ini mengubah kolom Customer ID dan Product ID dari format aslinya (biasanya string) menjadi indeks numerik menggunakan enumerate() dan map(). Kemudian, data disederhanakan menjadi tiga kolom: user, product, dan rating. Proses ini bertujuan untuk menyiapkan data agar bisa digunakan oleh model machine learning, khususnya dalam sistem rekomendasi berbasis collaborative filtering.
 
 **Alasan:**
 - Model neural network tidak menerima string sebagai input, hanya angka.
+- Konversi ke indeks numerik memungkinkan penggunaan embedding layer untuk merepresentasikan user dan produk dalam bentuk vektor.
 - Mapping ini memungkinkan pelatihan model menggunakan embedding layer yang efektif.
 
 ---
@@ -606,14 +609,14 @@ Kedua model bertujuan menghasilkan Top-N rekomendasi produk untuk pelanggan tert
 
 #### **Pendekatan 1: TF-IDF + Nearest Neighbors (Cosine Similarity)**
 
-Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**.
+Pendekatan ini mengubah teks deskripsi produk menjadi representasi numerik menggunakan **TF-IDF**, kemudian mencari produk yang paling mirip menggunakan algoritma **Nearest Neighbors** berbasis **cosine similarity**. Berikut adalah pustaka yang perlu diimport.
 
 ```python
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.neighbors import NearestNeighbors
 ```
 
-> **Penjelasan:** TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. Kata-kata yang unik akan mendapat bobot lebih tinggi, sedangkan kata-kata umum (seperti “dan”, “the”, dll.) akan dinormalisasi.
+> **Penjelasan:** TF-IDF (Term Frequency-Inverse Document Frequency) digunakan untuk mengubah data teks menjadi vektor numerik. Kata-kata yang unik akan mendapat bobot lebih tinggi, sedangkan kata-kata umum (seperti “dan”, “the”, dll.) akan dinormalisasi. Oleh karena itu melakukan extraksi text dengan TF-IDF memerlukan pustaka TfidfVectorizer, dan juga pustaka NearestNeighbors untuk mengambil prosese cosine similarity NearestNeighbors
 
 ---
 
@@ -1105,7 +1108,7 @@ $$
 
 - **Penjelasan:**  
   Precision@K mengukur proporsi item yang direkomendasikan dalam top-K yang benar-benar relevan.  
-  Artinya, dari K rekomendasi yang diberikan, berapa banyak yang sesuai dengan kebutuhan atau preferensi pengguna.
+  Artinya, dari K rekomendasi yang diberikan, berapa banyak yang sesuai dengan kebutuhan atau preferensi pengguna. Dengan adanya Precision@K bisa melengkapi mentrik evaluasi bagi Content-Based Filtering agar 
 
 ---
 
@@ -1117,7 +1120,7 @@ $$
 
 - **Penjelasan:**  
   Recall@K mengukur seberapa baik model dapat menangkap semua item relevan yang tersedia.  
-  Artinya, dari seluruh item yang sebenarnya relevan, berapa banyak yang berhasil direkomendasikan dalam top-K.
+  Artinya, dari seluruh item yang sebenarnya relevan, berapa banyak yang berhasil direkomendasikan dalam top-K. Dengan adanya Recall@K bisa melengkapi mentrik evaluasi bagi Content-Based Filtering agar 
 
 ---
 
@@ -1242,19 +1245,16 @@ Pendekatan Collaborative Filtering dievaluasi berdasarkan metrik *loss* dan RMSE
 
 ### **3. Kesimpulan dan Rekomendasi Model Terbaik**
 
-Berdasarkan analisis komparatif dari keempat model:
-
 | Aspek | Pilihan Utama | Alternatif/Baseline |
 | :--- | :--- | :--- |
-| **Akurasi Prediksi Tertinggi** | **RecommenderNet** | Matrix Factorization |
+| **Akurasi Prediksi Tertinggi (CF)** | **RecommenderNet** | Matrix Factorization |
 | **Stabilitas & Generalisasi** | **Matrix Factorization** | TF-IDF + LSA |
 | **Rekomendasi Berbasis Konten** | **TF-IDF + LSA** | TF-IDF + Nearest Neighbors |
-| **Sistem Hibrida (Ideal)** | Kombinasi **RecommenderNet** (untuk personalisasi) dan **TF-IDF + LSA** (untuk *cold-start* & atribut produk). |
 
 #### **Kesimpulan dan Rekomendasi Akhir:**
 
 1.  Untuk **akurasi personalisasi maksimal**, **RecommenderNet** adalah pilihan terbaik, dengan syarat wajib mengimplementasikan **`EarlyStopping`** pada epoch 5-6 untuk mencegah *overfitting* dan mengunci performa optimalnya.
 2.  Untuk **stabilitas, kemudahan implementasi, atau sebagai *baseline* yang kuat**, **Matrix Factorization** adalah pilihan yang sangat solid.
-3.  Untuk menangani **pengguna baru (*cold-start*) atau merekomendasikan item serupa**, **TF-IDF + LSA** adalah pendekatan yang paling andal karena kemampuannya memahami konten produk secara semantik.
+3.  Untuk menangani **pengguna baru (*cold-start*) atau merekomendasikan item serupa**, **TF-IDF + LSA** adalah pendekatan yang paling andal karena kemampuannya memahami konten produk secara semantik. Untuk TF-IDF + NearestNeighbors sendiri hampir mirip akurasinya dengan TF-IDF + LSA, namun kalah karena sifatnya yang telalu simpel dan tidak hal pemahaman semantik.
 
 Secara keseluruhan, **RecommenderNet** menonjol sebagai model dengan potensi tertinggi untuk memberikan rekomendasi yang paling akurat dan personal bagi pengguna. Namun, untuk sistem produksi yang robust, **pendekatan hibrida** yang menggabungkan kekuatan **RecommenderNet** dan **TF-IDF + LSA** akan menjadi solusi yang paling komprehensif.
